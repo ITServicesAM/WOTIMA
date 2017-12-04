@@ -1,0 +1,53 @@
+// Add your native dependencies here:
+
+// Uncomment to add recyclerview-v7 dependency
+//dependencies {
+//	compile 'com.android.support:recyclerview-v7:+'
+//}
+
+android {  
+  defaultConfig {  
+    generatedDensities = []
+    multiDexEnabled true
+    applicationId = "de.itservicesam.wotima"  
+  }
+  // after adding a few additional Firebase libs we'll need this (otherwise: OutOfMemoryException)
+   dexOptions {
+      javaMaxHeapSize "4g"
+    }
+  aaptOptions {  
+    additionalParameters "--no-version-vectors"  
+  } 
+	
+	signingConfigs {
+          debug {
+             storeFile file("../../keystores/debug.keystore")
+             storePassword "0102aragorn!"
+             keyAlias "android_debug"
+             keyPassword "0102aragorn!"
+         }
+
+         release {
+              storeFile file("../../keystores/release.keystore")
+              storePassword "0102aragorn!"
+              keyAlias "android_release"
+              keyPassword "0102aragorn!"
+          }
+     }
+
+  buildTypes {
+         debug {
+             signingConfig signingConfigs.debug
+         }
+         release {
+             signingConfig signingConfigs.release
+         }
+     }
+} 
+
+def settingsGradlePath = "$projectDir/../../app/App_Resources/Android/settings.gradle";
+def settingsGradleFile = new File(settingsGradlePath);
+if(settingsGradleFile.exists())
+{
+    apply from: settingsGradleFile;
+}

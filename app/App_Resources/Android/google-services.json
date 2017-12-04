@@ -1,0 +1,129 @@
+{
+  "project_info": {
+    "project_number": "8111052943",
+    "firebase_url": "https://nfc-worktime-manager.firebaseio.com",
+    "project_id": "nfc-worktime-manager",
+    "storage_bucket": "nfc-worktime-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8111052943:android:2b839d6d3f891edf",
+        "android_client_info": {
+          "package_name": "de.itservicesam.nfcworktimemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8111052943-n5396be887hqt54pdp39vmggmg3kka8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.itservicesam.nfcworktimemanager",
+            "certificate_hash": "c079b9b637bc25a5451ffa7c40ca2ff710dc3cc0"
+          }
+        },
+        {
+          "client_id": "8111052943-05t1pgq3rdjp0itg11332b3pqmcjdbld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.itservicesam.nfcworktimemanager",
+            "certificate_hash": "d4183d689944a0c0f9a298aa60f86f78a0c08ce1"
+          }
+        },
+        {
+          "client_id": "8111052943-9kskkbgnalu66et40r4ru482f21jgio7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH4Es4a-8-OJr2xfzJHOiUV9wMSZFRIk0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8111052943-9kskkbgnalu66et40r4ru482f21jgio7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "8111052943-uj9vijmqh1rhsprf8e23bgbvmqs5jege.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.itservicesam.wotima"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8111052943:android:81da802dff08c825",
+        "android_client_info": {
+          "package_name": "de.itservicesam.wotima"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8111052943-voa7s66f3taalkr4leg9f8jn3uce3g1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.itservicesam.wotima",
+            "certificate_hash": "69b76c916bf45855f37db99a55ac6e83d6a64478"
+          }
+        },
+        {
+          "client_id": "8111052943-j9qpnane2cgnns36tnhd3je36oopnvc5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.itservicesam.wotima",
+            "certificate_hash": "41a214eef4ee0a0f06605d56f6a14d913cc62d45"
+          }
+        },
+        {
+          "client_id": "8111052943-9kskkbgnalu66et40r4ru482f21jgio7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH4Es4a-8-OJr2xfzJHOiUV9wMSZFRIk0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8111052943-9kskkbgnalu66et40r4ru482f21jgio7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "8111052943-uj9vijmqh1rhsprf8e23bgbvmqs5jege.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.itservicesam.wotima"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
