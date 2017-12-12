@@ -1,0 +1,42 @@
+<ActionBar class="action-bar">
+    <GridLayout class="m-r-16" columns="auto,*" rows="*">
+        <Ripple row="0" col="0" (tap)="onBackPressed()">
+            <Label class="mdi p-8" [text]="'mdi-arrow-back' | fonticon"></Label>
+        </Ripple>
+        <Label
+                #lblActionBar
+                class="action-bar-title"
+                text="WOTIMA"
+                colSpan="2"
+                row="0"
+                col="0"
+                style.textAlignment="center"></Label>
+    </GridLayout>
+</ActionBar>
+
+<StackLayout class="page" orientation="vertical">
+    <CardView elevation="40" radius="24" class="page m-16">
+        <StackLayout *ngIf="worktime" orientation="vertical">
+            <StackLayout class="page p-16" orientation="vertical">
+                <Label class="h3 m-b-16 font-weight-bold"
+                       style.margin-bottom="24"
+                       [text]="worktime.workTimeStart | worktimeDate"></Label>
+                <Label class="m-b-8" text="Arbeitsbeginn"></Label>
+                <Button class="btn btn-outline m-b-12 no-margin no-padding"
+                        (tap)="onEditStartime()"
+                        style.margin-bottom="16"
+                        [text]="worktime.workTimeStart | worktime"></Button>
+                <Label class="m-b-8" text="Arbeitsende"></Label>
+                <Button class="btn btn-outline m-b-12 no-margin no-padding"
+                        (tap)="onEditEndtime()"
+                        style.margin-bottom="16"
+                        [text]="worktime.workTimeEnd | worktime"></Button>
+                <TextInputLayout hint="Pause">
+                    <TextField [text]="worktime.workingMinutesPause"></TextField>
+                </TextInputLayout>
+                <Label class="h4" [text]="worktime.workingMinutesNetto | worktimeOvertime"></Label>
+            </StackLayout>
+            <Button class="btn btn-primary-ab margin-full-btn" (tap)="onSaveChanges()" text="Speichern"></Button>
+        </StackLayout>
+    </CardView>
+</StackLayout>

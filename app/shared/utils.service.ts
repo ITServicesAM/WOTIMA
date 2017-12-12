@@ -12,6 +12,6 @@ export class UtilsService {
     }
 
     showInfoDialog(msg: string) {
-        TNSFancyAlert.showInfo('INFO',msg,'ok');
+        TNSFancyAlert.showInfo('INFO', msg, 'ok');
     }
 }

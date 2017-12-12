@@ -1,0 +1,48 @@
+<!--<ActionBar class="action-bar">-->
+<!--<GridLayout class="m-r-16" columns="*,auto" rows="*">-->
+<!--<Label-->
+<!--#lblActionBar-->
+<!--class="action-bar-title"-->
+<!--text="WOTIMA"-->
+<!--row="0"-->
+<!--col="0"-->
+<!--colSpan="2"-->
+<!--style.textAlignment="center"></Label>-->
+<!--<Ripple row="0" col="1" (tap)="onSignOut()">-->
+<!--<Label class="mdi p-8" [text]="'mdi-lock-open' | fonticon"-->
+<!--android.position="actionBar" ios.position="right"></Label>-->
+<!--</Ripple>-->
+<!--</GridLayout>-->
+<!--</ActionBar>-->
+
+<StackLayout class="page" orientation="horizontal">
+    <ScrollView>
+        <GridLayout rows="*,auto,auto,*" columns="32,*,32" class="m-t-32">
+            <CardView row="1" col="1" elevation="40" radius="24" class="m-b-48">
+                <StackLayout class="p-16">
+                    <Label class="text-center h3 font-weight-bold m-b-8" text="Aktuelles Arbeitszeitkonto"
+                           textWrap="true"></Label>
+                    <Label class="text-center h3" [text]="worktimeBudget | worktimeBudget"></Label>
+                    <Ripple class="m-t-16">
+                        <Button class="btn btn-outline" text="Bearbeiten" (tap)="onEdit()"></Button>
+                    </Ripple>
+                </StackLayout>
+            </CardView>
+            <CardView row="2" col="1" elevation="40" radius="24" class="m-b-32">
+                <GridLayout rows="auto,auto,auto,auto,auto" columns="*" class="p-16">
+                    <Label row="0" [text]="curDate" class="h3 m-b-16 font-weight-bold"></Label>
+                    <Ripple row="1">
+                        <Button class="btn btn-primary no-margin no-padding" [text]="worktimeStartString"
+                                (tap)="onChooseStarttime()"></Button>
+                    </Ripple>
+                    <Ripple row="2">
+                        <Button class="btn btn-primary  no-margin" [text]="worktimeEndString"
+                                (tap)="onChooseEndtime()"></Button>
+                    </Ripple>
+                    <Label *ngIf="worktimePauseString" row="3" [text]="worktimePauseString" class="h4"></Label>
+                    <Label *ngIf="worktimeOvertimeString" row="4" [text]="worktimeOvertimeString" class="h4"></Label>
+                </GridLayout>
+            </CardView>
+        </GridLayout>
+    </ScrollView>
+</StackLayout>

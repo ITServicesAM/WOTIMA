@@ -6,16 +6,19 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthGuard } from './auth-guard.service';
 import { BackendService } from './shared/backend.service';
-import { HomeModule } from './home/home.module';
 import { LoginModule } from './auth/login/login.module';
-import { UtilsService } from './shared/UtilsService';
+import { UtilsService } from './shared/utils.service';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
+import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
+import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
+import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import firebase = require("nativescript-plugin-firebase/app");
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
+elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
 
 firebase.initializeApp({
     persist: true
@@ -30,8 +33,9 @@ firebase.initializeApp({
     imports: [
         NativeScriptModule,
         AppRoutingModule,
-        HomeModule,
         LoginModule,
+        WorktimeDetailModule,
+        WorktimeNewModule,
         TNSFontIconModule.forRoot({
             'mdi': 'material-design-icons.css'
         })

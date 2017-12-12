@@ -1,0 +1,32 @@
+<!--<ActionBar class="action-bar">-->
+    <!--<GridLayout class="m-r-16" columns="*,auto" rows="*">-->
+        <!--<Label  class="action-bar-title"-->
+                <!--text="WOTIMA"-->
+                <!--row="0"-->
+                <!--col="0"-->
+                <!--colSpan="2"-->
+                <!--style.textAlignment="center"></Label>-->
+        <!--<Ripple row="0" col="1" (tap)="onAddWorktime()">-->
+            <!--<Label class="mdi p-8" [text]="'mdi-add' | fonticon"-->
+                   <!--android.position="actionBar" ios.position="right"></Label>-->
+        <!--</Ripple>-->
+    <!--</GridLayout>-->
+<!--</ActionBar>-->
+
+<StackLayout class="page root_element p-16" orientation="vertical">
+    <RadListView [items]="_dataItems" class="page">
+        <ng-template tkListItemTemplate let-item="item">
+            <CardView elevation="40" radius="24" class="page m-16">
+                <Ripple (tap)="onEditWorktime(item)">
+                    <GridLayout rows="auto,auto" columns="*,auto"  class="page p-16">
+                        <Label row="0" col="0" class="h3 m-b-16 font-weight-bold" [text]="item.workTimeStart | worktimeDate"></Label>
+                        <Label row="1" col="0" class="h4" [text]="item.workingMinutesNetto | worktimeOvertime"></Label>
+                        <Label row="0" rowSpan="2" verticalAlignment="center" col="1" class="mdi p-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
+                    </GridLayout>
+                </Ripple>
+            </CardView>
+        </ng-template>
+
+        <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Default" itemDeleteAnimation="Default"></ListViewLinearLayout>
+    </RadListView>
+</StackLayout>

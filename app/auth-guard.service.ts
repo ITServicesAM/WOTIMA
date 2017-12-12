@@ -4,7 +4,7 @@ import { CanActivate } from "@angular/router";
 import { BackendService } from "./shared/backend.service";
 import { RouterExtensions } from 'nativescript-angular';
 import { User } from 'nativescript-plugin-firebase';
-import { UtilsService } from './shared/UtilsService';
+import { UtilsService } from './shared/utils.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivate() {
-        return this.backendServe.isLoggedIn().then((user: User) => {
+        return this.backendServe.getCurrentUser().then((user: User) => {
             if (!user) {
                 console.log("No User, Route can not be activated!");
                 this.router.navigate(["/login"]);

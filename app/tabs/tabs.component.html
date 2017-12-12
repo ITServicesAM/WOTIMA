@@ -1,0 +1,44 @@
+<!--
+The TabView component provides a simple way to navigate between different views by
+tapping on some of the tabs or by swiping between the views.
+Learn more about the TabView component in this documentation article:
+http://docs.nativescript.org/angular/code-samples/ui/tab-view
+-->
+<TabView (selectedIndexChanged)="onSelectedIndexChanged($event)" class="tab-view" [(ngModel)]="selectedTabIndex">
+    <ActionBar class="action-bar">
+        <GridLayout class="m-r-16" columns="*,auto" rows="*">
+            <Label class="action-bar-title"
+                   text="WOTIMA"
+                   row="0"
+                   col="0"
+                   colSpan="2"
+                   style.textAlignment="center"></Label>
+            <Ripple *ngIf="selectedTabIndex === 0" row="0" col="1" (tap)="onSignOut()">
+                <Label class="mdi p-8" [text]="'mdi-lock-open' | fonticon"
+                       android.position="actionBar" ios.position="right"></Label>
+            </Ripple>
+            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="1" (tap)="onAddWorktime()">
+                <Label class="mdi p-8" [text]="'mdi-add' | fonticon"
+                       android.position="actionBar" ios.position="right"></Label>
+            </Ripple>
+        </GridLayout>
+    </ActionBar>
+    <!--
+    To add a new TabView item, add a new layout component with a tabItem Angular directive.
+    Assign the tabItem directive an object that declares the tab item button's title and icon source.
+    -->
+    <StackLayout class="tab-view-item"
+                 *tabItem="{title: 'Mein Arbeitszeitkonto', iconSource: getIconSource('worktime-home')}"
+                 color="#2f4f4f">
+        <!--
+        You can declare the layout and components of each view inside the TabView items directly.
+        In this case the view contents and back end logic are separated in nested components.
+        You can find these components in their respective folders /worktime-home, /browse etc.
+        -->
+        <worktime-home></worktime-home>
+    </StackLayout>
+    <StackLayout class="tab-view-item"
+                 *tabItem="{title: 'Meine Arbeitszeiten', iconSource: getIconSource('worktime-list')}" color="#2f4f4f">
+        <worktime-list></worktime-list>
+    </StackLayout>
+</TabView>

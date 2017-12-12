@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { RouterExtensions } from 'nativescript-angular';
 import { BackendService } from '../../shared/backend.service';
-import { User } from 'nativescript-plugin-firebase';
-import { UtilsService } from '../../shared/UtilsService';
-import { LoadingIndicator, OptionsCommon } from "nativescript-loading-indicator";
+import { UtilsService } from '../../shared/utils.service';
 import { Page } from 'tns-core-modules/ui/page';
 
 @Component({
@@ -12,43 +10,33 @@ import { Page } from 'tns-core-modules/ui/page';
     templateUrl: "./login.component.html"
 })
 export class LoginComponent implements OnInit {
-    email: string;
-    password: string;
-
-    //Loading indicator
-    loader: LoadingIndicator;
-    loaderOptions: OptionsCommon;
+    busy: boolean = false;
 
     constructor(private page: Page,
                 private router: RouterExtensions,
                 private backendService: BackendService,
                 private utils: UtilsService) {
-        this.loader = new LoadingIndicator();
-        this.loaderOptions = {
-            message: ""
-        }
     }
 
     ngOnInit() {
         this.page.actionBarHidden = true;
     }
 
+
     onLoginWithGoogle(): void {
-        this.loader.show(this.loaderOptions);
+        this.busy = true;
         console.log("Login with Google clicked!");
         this.backendService.loginWithGoogle()
-            .then((user: User) => {
-                console.log(`Google login successful. Current user is: ${JSON.stringify(user)}`);
-                this.router.navigate(["/home"]);
-                this.loader.hide();
-            })
-            .catch(err => {
-                this.utils.handleError(err);
-            });
+            .then(() => {
+                this.router.navigate(["/tabs"], {clearHistory: true});
+                this.busy = false;
+            }).catch(err => {
+            this.utils.handleError(err);
+        });
     }
 
     onLoginWithFacebook(): void {
         console.log("Login with Facebook clicked!");
-        this.router.navigate(["/home"]);
+        this.router.navigate(["/tabs"]);
     }
 }

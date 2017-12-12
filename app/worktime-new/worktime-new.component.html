@@ -1,0 +1,56 @@
+<ActionBar class="action-bar">
+    <GridLayout class="m-r-16" columns="auto,*" rows="*">
+        <Ripple row="0" col="0" (tap)="onBackPressed()">
+            <Label class="mdi p-8" [text]="'mdi-arrow-back' | fonticon"></Label>
+        </Ripple>
+        <Label
+                #lblActionBar
+                class="action-bar-title"
+                text="WOTIMA"
+                colSpan="2"
+                row="0"
+                col="0"
+                style.textAlignment="center"></Label>
+    </GridLayout>
+</ActionBar>
+
+<ScrollView class="page">
+    <StackLayout orientation="vertical">
+        <CardView elevation="40" radius="24" class="m-16">
+            <StackLayout orientation="vertical">
+                <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="auto,*, auto" class="p-16">
+                    <Label row="0" col="0"
+                           class="h3 m-b-16 font-weight-bold"
+                           (tap)="onEditDate()"
+                           style.margin-bottom="24"
+                           [text]="worktimeDate | worktimeDate"></Label>
+                    <Label row="0" col="2"
+                           class="mdi p-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
+                    <Label row="1" col="0" class="m-b-8 h4" text="Arbeitsbeginn"></Label>
+                    <Label row="2" col="0" class="h4"
+                           (tap)="onEditStarttime()"
+                           style.margin-bottom="16"
+                           [text]="worktimeStart | worktime"></Label>
+                    <Label row="2" col="2"
+                           class="mdi p-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
+                    <Label row="3" col="0" class="m-b-8 h4" text="Arbeitsende"></Label>
+                    <Label row="4" col="0" class="h4"
+                           (tap)="onEditEndtime()"
+                           style.margin-bottom="16"
+                           [text]="worktimeEnd | worktime"></Label>
+                    <Label row="4" col="2"
+                           class="mdi p-8 m-b-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
+                </GridLayout>
+                <StackLayout class="m-b-16 p-l-16 p-r-16">
+                    <TextInputLayout hint="Pause">
+                        <TextField #pauseTextfield [ngModel]="workingMinutesPause" (returnPress)="onPauseChange(pauseTextfield.text)"
+                                   keyboardType="number" returnKeyType="done"></TextField>
+                    </TextInputLayout>
+                </StackLayout>
+                <Label class="h4 m-b-16 p-l-16 p-r-16"
+                       [text]="workingMinutesNetto | worktimeOvertime"></Label>
+                <Button class="btn btn-primary-ab margin-full-btn" (tap)="onSaveChanges()" text="Speichern"></Button>
+            </StackLayout>
+        </CardView>
+    </StackLayout>
+</ScrollView>
