@@ -3,7 +3,7 @@ import { isAndroid } from "platform";
 import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view";
 import { setTimeout } from 'tns-core-modules/timer';
 import { RouterExtensions } from 'nativescript-angular';
-import { BackendService } from '../shared/backend.service';
+import { BackendService } from '../services/backend.service';
 
 @Component({
     selector: "TabsComponent",

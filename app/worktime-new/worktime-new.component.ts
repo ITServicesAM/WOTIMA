@@ -4,9 +4,9 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import * as TimeDatePicker from 'nativescript-timedatepicker';
 import 'rxjs/add/observable/of';
-import { BackendService } from '../shared/backend.service';
+import { BackendService } from '../services/backend.service';
 import { Worktime } from '../models/worktime.interface';
-import { UtilsService } from '../shared/utils.service';
+import { UtilsService } from '../services/utils.service';
 
 @Component({
     selector: "worktime-new",

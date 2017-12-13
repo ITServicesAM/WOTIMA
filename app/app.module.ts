@@ -5,9 +5,9 @@ import { NSModuleFactoryLoader } from "nativescript-angular/router";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthGuard } from './auth-guard.service';
-import { BackendService } from './shared/backend.service';
+import { BackendService } from './services/backend.service';
 import { LoginModule } from './auth/login/login.module';
-import { UtilsService } from './shared/utils.service';
+import { UtilsService } from './services/utils.service';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
@@ -21,7 +21,16 @@ elementRegistryModule.registerElement("CardView", () => require("nativescript-ca
 elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
 
 firebase.initializeApp({
-    persist: true
+    persist: true,
+    onAuthStateChanged: (data: any) => {
+        console.log(JSON.stringify(data));
+        if (data.loggedIn) {
+            BackendService.setToken(data.user.uid);
+        }
+        else {
+            BackendService.setToken("");
+        }
+    }
 }).then((instance) => {
     console.log(`Firebase init successful with instance: instance`, instance)
 }).catch(err => console.log("Firebase init failed!"));
@@ -44,7 +53,7 @@ firebase.initializeApp({
         AppComponent
     ],
     providers: [
-        {provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader},
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
         AuthGuard,
         BackendService,
         UtilsService

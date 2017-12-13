@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit } from "@angular/core";
-import { BackendService } from '../../shared/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { RouterExtensions } from 'nativescript-angular';
-import { UtilsService } from '../../shared/utils.service';
+import { UtilsService } from '../../services/utils.service';
 import * as TimeDatePicker from 'nativescript-timedatepicker';
 import { Page } from 'tns-core-modules/ui/page';
 import * as moment from 'moment';

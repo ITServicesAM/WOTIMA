@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { CanActivate } from "@angular/router";
 
-import { BackendService } from "./shared/backend.service";
+import { BackendService } from "./services/backend.service";
 import { RouterExtensions } from 'nativescript-angular';
 import { User } from 'nativescript-plugin-firebase';
-import { UtilsService } from './shared/utils.service';
+import { UtilsService } from './services/utils.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

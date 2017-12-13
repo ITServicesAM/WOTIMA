@@ -1,8 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { PageRoute, RouterExtensions } from 'nativescript-angular';
 import "rxjs/add/operator/switchMap";
-import { UtilsService } from '../shared/utils.service';
-import { BackendService } from '../shared/backend.service';
+import { UtilsService } from '../services/utils.service';
+import { BackendService } from '../services/backend.service';
 import { Worktime } from '../models/worktime.interface';
 import { firestore } from 'nativescript-plugin-firebase';
 import * as moment from 'moment';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { RouterExtensions } from 'nativescript-angular';
-import { BackendService } from '../../shared/backend.service';
-import { UtilsService } from '../../shared/utils.service';
+import { BackendService } from '../../services/backend.service';
+import { UtilsService } from '../../services/utils.service';
 import { Page } from 'tns-core-modules/ui/page';
 
 @Component({
