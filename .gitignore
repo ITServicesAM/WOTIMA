@@ -4,7 +4,6 @@ npm-debug.log
 *.js.map
 **/*.js
 !tools/*.js
-**/*.css
 hooks/
 lib/
 node_modules/
@@ -14,6 +13,3 @@ typings/
 .idea
 .cloud
 /.project
-
-
-!static/app/custom.css

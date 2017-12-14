@@ -1,0 +1,19 @@
+.root_element {
+    height: 100%;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
+.m-b-16 {
+    margin-bottom: 16;
+}
+
+.m-16 {
+    margin: 16;
+}
+
+.page {
+    background-color: #f8f8f8;
+}
