@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { BackendService } from '../../services/backend.service';
 import { RouterExtensions } from 'nativescript-angular';
 import { UtilsService } from '../../services/utils.service';
@@ -7,9 +7,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import 'moment/locale/de';
-import { firestore } from 'nativescript-plugin-firebase';
-import { EventData } from 'tns-core-modules/data/observable';
-import DocumentSnapshot = firestore.DocumentSnapshot;
+import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "worktime-home",
@@ -19,9 +17,11 @@ import DocumentSnapshot = firestore.DocumentSnapshot;
 })
 export class WorktimeHomeComponent implements OnInit {
 
+    public worktimeBudget$: Observable<any>;
+    public worktime$: Observable<any>;
+
     curDate: string;
 
-    worktimeBudget: string;
     worktimeStartString: string = "KOMMTZEIT ERFASSEN";
     worktimeStartDateString: Moment;
     worktimeEndString: string = "GEHTZEIT ERFASSEN";
@@ -32,18 +32,16 @@ export class WorktimeHomeComponent implements OnInit {
     constructor(private page: Page,
                 private backendService: BackendService,
                 private router: RouterExtensions,
-                private utils: UtilsService,
-                private zone: NgZone) {
+                private utils: UtilsService) {
     }
 
     ngOnInit() {
         moment.locale('de');
         this.curDate = moment().format('ddd, DD.MM.YYYY');
         this.page.actionBarHidden = false;
-        this.page.on('navigatedTo', (data: EventData) => {
-            this.loadWorktimeBudget();
-            this.loadWorktime();
-        });
+
+        this.loadWorktimeBudget();
+        this.loadWorktime();
     }
 
     onEdit() {
@@ -51,42 +49,42 @@ export class WorktimeHomeComponent implements OnInit {
     }
 
     loadWorktimeBudget() {
-        this.backendService.loadWorktimeBudget(doc => {
-            if (doc.exists) {
-                this.zone.run(() => {
-                    this.worktimeBudget = doc.data().worktimeBudget;
-                });
-            }
-        });
+        this.worktimeBudget$ = this.backendService.loadWorktimeBudget();
     }
 
     loadWorktime() {
         let curTime: Moment = moment();
-        this.backendService.loadWorktime(curTime.format("YYYY-MM-DD"), (doc: DocumentSnapshot) => {
-            if (doc.exists) {
-                this.zone.run(() => {
-                    if (doc.data().workTimeStart) {
-                        this.worktimeStartDateString = moment(doc.data().workTimeStart);
-                        // console.log(`worktimeStartString: ${this.worktimeStartDateString.format()}`);
-                        this.worktimeStartString =
-                            `KOMMTZEIT: ${this.worktimeStartDateString.hour()}:${this.worktimeStartDateString.minute()} UHR`;
-                    }
+        this.worktime$ = this.backendService.loadWorktime(curTime.format("YYYY-MM-DD"));
+        this.worktime$.subscribe(data => {
+            // console.log(JSON.stringify(data));
+            if (data != undefined) {
+                if (data.workTimeStart) {
+                    this.worktimeStartDateString = moment(data.workTimeStart);
+                    // console.log(`worktimeStartString: ${this.worktimeStartDateString.format()}`);
+                    this.worktimeStartString =
+                        `KOMMTZEIT: ${this.worktimeStartDateString.format("HH")}:${this.worktimeStartDateString.format("mm")} UHR`;
+                }
 
-                    if (doc.data().workTimeEnd) {
-                        this.worktimeEndDateString = moment(doc.data().workTimeEnd);
-                        // console.log(`worktimeEndString: ${this.worktimeEndDateString.format()}`);
-                        this.worktimeEndString =
-                            `GEHTZEIT: ${this.worktimeEndDateString.hour()}:${this.worktimeEndDateString.minute()} UHR`;
-                    }
+                if (data.workTimeEnd) {
+                    this.worktimeEndDateString = moment(data.workTimeEnd);
+                    // console.log(`worktimeEndString: ${this.worktimeEndDateString.format()}`);
+                    this.worktimeEndString =
+                        `GEHTZEIT: ${this.worktimeEndDateString.format("HH")}:${this.worktimeEndDateString.format("mm")} UHR`;
+                }
 
-                    if (doc.data().workingMinutesPause) {
-                        this.worktimePauseString = `${doc.data().workingMinutesPause} Minuten Pause`;
-                    }
+                // console.log(`Pausenzeit vor if beträgt: ${data.workingMinutesPause}`);
+                if (data.workingMinutesPause != undefined) {
+                    // console.log(`Pausenzeit nach if beträgt: ${data.workingMinutesPause}`);
+                    this.worktimePauseString = `${data.workingMinutesPause == 0 ? "0" : data.workingMinutesPause} Minuten Pause`;
+                }
 
-                    if (doc.data().workingMinutesOverTime) {
-                        this.worktimeOvertimeString = `${doc.data().workingMinutesOverTime} Minuten Mehrarbeitszeit`;
-                    }
-                });
+                if (data.workingMinutesOverTime != undefined)
+                    this.worktimeOvertimeString = `${data.workingMinutesOverTime} Minuten Mehrarbeitszeit`;
+            } else {
+                this.worktimeStartString = "KOMMTZEIT ERFASSEN";
+                this.worktimeEndString = "GEHTZEIT ERFASSEN";
+                this.worktimePauseString = undefined;
+                this.worktimeOvertimeString = undefined;
             }
         });
     }

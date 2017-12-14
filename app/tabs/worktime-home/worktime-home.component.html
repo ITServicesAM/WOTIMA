@@ -22,7 +22,7 @@
                 <StackLayout class="p-16">
                     <Label class="text-center h3 font-weight-bold m-b-8" text="Aktuelles Arbeitszeitkonto"
                            textWrap="true"></Label>
-                    <Label class="text-center h3" [text]="worktimeBudget | worktimeBudget"></Label>
+                    <Label class="text-center h3" [text]="(worktimeBudget$ | async) | worktimeBudget"></Label>
                     <Ripple class="m-t-16">
                         <Button class="btn btn-outline" text="Bearbeiten" (tap)="onEdit()"></Button>
                     </Ripple>

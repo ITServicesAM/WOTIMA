@@ -23,7 +23,7 @@ elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputla
 firebase.initializeApp({
     persist: true,
     onAuthStateChanged: (data: any) => {
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         if (data.loggedIn) {
             BackendService.setToken(data.user.uid);
         }
@@ -53,7 +53,7 @@ firebase.initializeApp({
         AppComponent
     ],
     providers: [
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
+        {provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader},
         AuthGuard,
         BackendService,
         UtilsService

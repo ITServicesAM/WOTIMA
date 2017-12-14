@@ -3,12 +3,8 @@ import { PageRoute, RouterExtensions } from 'nativescript-angular';
 import "rxjs/add/operator/switchMap";
 import { UtilsService } from '../services/utils.service';
 import { BackendService } from '../services/backend.service';
-import { Worktime } from '../models/worktime.interface';
 import { firestore } from 'nativescript-plugin-firebase';
-import * as moment from 'moment';
-import { Moment } from 'moment';
-import * as TimeDatePicker from 'nativescript-timedatepicker';
-import DocumentSnapshot = firestore.DocumentSnapshot;
+import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "worktime-detail",
@@ -19,7 +15,7 @@ import DocumentSnapshot = firestore.DocumentSnapshot;
 export class WorktimeDetailComponent {
 
     dateKey: string;
-    worktime: Worktime;
+    worktime$: Observable<any>;
 
     constructor(private router: RouterExtensions,
                 private pageRoute: PageRoute,
@@ -36,24 +32,25 @@ export class WorktimeDetailComponent {
     }
 
     loadWorktime() {
-        this.backend.loadWorktime(this.dateKey, (doc: DocumentSnapshot) => {
-            if (doc.exists) {
-                this.zone.run(() => {
-                    let data = doc.data();
-                    this.worktime = new Worktime(data.date,
-                        data.workTimeStart,
-                        data.workTimeEnd,
-                        data.reverseOrderDate,
-                        data.workingMinutesBrutto,
-                        data.workingMinutesNetto,
-                        data.workingMinutesOverTime,
-                        data.workingMinutesPause);
-                    // this.utils.showInfoDialog(`Worktime: ${this.worktime}`);
-                });
-            } else {
-                this.utils.showInfoDialog(`Document not found, handle this error!`);
-            }
-        });
+        this.backend.loadWorktime(this.dateKey);
+        // this.backend.loadWorktime(this.dateKey, (doc: DocumentSnapshot) => {
+        //     if (doc.exists) {
+        //         this.zone.run(() => {
+        //             let data = doc.data();
+        //             this.worktime = new Worktime(data.date,
+        //                 data.workTimeStart,
+        //                 data.workTimeEnd,
+        //                 data.reverseOrderDate,
+        //                 data.workingMinutesBrutto,
+        //                 data.workingMinutesNetto,
+        //                 data.workingMinutesOverTime,
+        //                 data.workingMinutesPause);
+        //             // this.utils.showInfoDialog(`Worktime: ${this.worktime}`);
+        //         });
+        //     } else {
+        //         this.utils.showInfoDialog(`Document not found, handle this error!`);
+        //     }
+        // });
     }
 
     onBackPressed() {
@@ -61,39 +58,39 @@ export class WorktimeDetailComponent {
     }
 
     onEditStartime() {
-        let startTime: Moment;
-        if (this.worktime.workTimeStart) {
-            startTime = moment(this.worktime.workTimeStart);
-        } else
-            startTime = moment();
-
-        let mCallback = ((result) => {
-            if (result) {
-                let date = moment(result, "DD-MM-YYYY-HH-mm-ZZ");
-                console.log(date.format());
-                this.worktime.workTimeStart = date.format();
-            }
-        });
-        TimeDatePicker.init(mCallback, null, startTime.toDate());
-        TimeDatePicker.showTimePickerDialog();
+        // let startTime: Moment;
+        // if (this.worktime.workTimeStart) {
+        //     startTime = moment(this.worktime.workTimeStart);
+        // } else
+        //     startTime = moment();
+        //
+        // let mCallback = ((result) => {
+        //     if (result) {
+        //         let date = moment(result, "DD-MM-YYYY-HH-mm-ZZ");
+        //         console.log(date.format());
+        //         this.worktime.workTimeStart = date.format();
+        //     }
+        // });
+        // TimeDatePicker.init(mCallback, null, startTime.toDate());
+        // TimeDatePicker.showTimePickerDialog();
     }
 
     onEditEndtime() {
-        let endTime: Moment;
-        if (this.worktime.workTimeEnd) {
-            endTime = moment(this.worktime.workTimeEnd);
-        } else
-            endTime = moment();
-
-        let mCallback = ((result) => {
-            if (result) {
-                let date = moment(result, "DD-MM-YYYY-HH-mm-ZZ");
-                console.log(date.format());
-                this.worktime.workTimeEnd = date.format();
-            }
-        });
-        TimeDatePicker.init(mCallback, null, endTime.toDate());
-        TimeDatePicker.showTimePickerDialog();
+        // let endTime: Moment;
+        // if (this.worktime.workTimeEnd) {
+        //     endTime = moment(this.worktime.workTimeEnd);
+        // } else
+        //     endTime = moment();
+        //
+        // let mCallback = ((result) => {
+        //     if (result) {
+        //         let date = moment(result, "DD-MM-YYYY-HH-mm-ZZ");
+        //         console.log(date.format());
+        //         this.worktime.workTimeEnd = date.format();
+        //     }
+        // });
+        // TimeDatePicker.init(mCallback, null, endTime.toDate());
+        // TimeDatePicker.showTimePickerDialog();
     }
 
     onSaveChanges() {

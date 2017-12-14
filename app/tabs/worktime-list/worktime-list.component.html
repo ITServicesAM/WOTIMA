@@ -1,59 +1,17 @@
 <StackLayout class="page root_element p-16" orientation="vertical">
-
-    <!-- <StackLayout>
-        <Button (tap)="addItem()" text="Add Item"></Button>
-        <ListView [items]="items$ | async" (itemTap)="itemTap($event)">
-            <template let-item="item" let-odd="odd" let-even="even">
-                <StackLayout [class.odd]="odd" [class.even]="even">
-                    <Label [text]="item" textWrap="true"></Label>
-                </StackLayout>
-            </template>
-        </ListView>
-    </StackLayout> -->
-
-    <!-- <Button (tap)="addItem()" text="Add Item"></Button>
-    <RadListView [items]="items$ | async">
-        <ng-template tkListItemTemplate let-item="item">
-            <StackLayout [class.odd]="odd" [class.even]="even">
-                <Label [text]="item" textWrap="true"></Label>
-            </StackLayout>
-        </ng-template>
-        <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Default" itemDeleteAnimation="Default"></ListViewLinearLayout>
-    </RadListView> -->
-
-    <!-- <RadListView [items]="worktime$ | async" class="page">
-        <ng-template tkListItemTemplate let-item="item">
+    <ListView [items]="worktimes$ | async" separatorColor="Transparent">
+        <ng-template let-item="item">
             <CardView elevation="40" radius="24" class="page m-16">
                 <Ripple (tap)="onEditWorktime(item)">
                     <GridLayout rows="auto,auto" columns="*,auto" class="page p-16">
-                        <Label row="0" col="0" class="h3 m-b-16 font-weight-bold" [text]="item.workTimeStart | worktimeDate"></Label>
+                        <Label row="0" col="0" class="h3 m-b-16 font-weight-bold"
+                               [text]="item.workTimeStart | worktimeDate"></Label>
                         <Label row="1" col="0" class="h4" [text]="item.workingMinutesNetto | worktimeOvertime"></Label>
-                        <Label row="0" rowSpan="2" verticalAlignment="center" col="1" class="mdi p-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
+                        <Label row="0" rowSpan="2" verticalAlignment="center" col="1" class="mdi p-8"
+                               [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
                     </GridLayout>
                 </Ripple>
             </CardView>
-        </ng-template>
-
-        <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Default" itemDeleteAnimation="Default"></ListViewLinearLayout>
-    </RadListView> -->
-
-    <!-- <StackLayout orientation="vertical" *ngFor="let worktime of (worktimes$ | async)">
-        <Label text="worktime.date" textWrap="true"></Label>
-        <Label text="worktime.workTimeStart" textWrap="true"></Label>
-        <Label text="worktime.workTimeEnd" textWrap="true"></Label>
-    </StackLayout> -->
-
-    <ListView [items]="worktimes$ | async" class="list-group">
-        <ng-template let-item="item" let-odd="odd" let-even="even">
-            < <CardView elevation="40" radius="24" class="page m-16">
-                    <Ripple (tap)="onEditWorktime(item)">
-                        <GridLayout rows="auto,auto" columns="*,auto" class="page p-16">
-                            <Label row="0" col="0" class="h3 m-b-16 font-weight-bold" [text]="item.workTimeStart | worktimeDate"></Label>
-                            <Label row="1" col="0" class="h4" [text]="item.workingMinutesNetto | worktimeOvertime"></Label>
-                            <Label row="0" rowSpan="2" verticalAlignment="center" col="1" class="mdi p-8" [text]="'mdi-keyboard-arrow-right' | fonticon"></Label>
-                        </GridLayout>
-                    </Ripple>
-                </CardView>
         </ng-template>
     </ListView>
 </StackLayout>
