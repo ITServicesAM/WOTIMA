@@ -6,20 +6,27 @@ http://docs.nativescript.org/angular/code-samples/ui/tab-view
 -->
 <TabView (selectedIndexChanged)="onSelectedIndexChanged($event)" class="tab-view" [(ngModel)]="selectedTabIndex">
     <ActionBar class="action-bar">
-        <GridLayout class="m-r-16" columns="*,auto" rows="*">
-            <Label class="action-bar-title"
+        <GridLayout columns="auto,*,48" rows="*" verticalAlignment="center">
+            <Ripple *ngIf="(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
+                    pageTransition="slideTop">
+                <Image class="profile-image" [src]="(user$ | async)?.profileImageURL"></Image>
+            </Ripple>
+            <Ripple *ngIf="!(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
+                    pageTransition="slideTop">
+                <Button class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Button>
+            </Ripple>
+            <Label horizontalAlignment="center"
+                   class="action-bar-title"
                    text="WOTIMA"
                    row="0"
-                   col="0"
-                   colSpan="2"
-                   style.textAlignment="center"></Label>
-            <Ripple *ngIf="selectedTabIndex === 0" row="0" col="1" (tap)="onSignOut()">
-                <Label class="mdi p-8" [text]="'mdi-lock-open' | fonticon"
-                       android.position="actionBar" ios.position="right"></Label>
+                   col="1"></Label>
+            <Ripple *ngIf="selectedTabIndex === 0" row="0" col="2" (tap)="onSignOut()">
+                <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
+                       [text]="'mdi-lock-open' | fonticon"></Label>
             </Ripple>
-            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="1" (tap)="onAddWorktime()">
-                <Label class="mdi p-8" [text]="'mdi-add' | fonticon"
-                       android.position="actionBar" ios.position="right"></Label>
+            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="2" (tap)="onAddWorktime()">
+                <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
+                       [text]="'mdi-add' | fonticon"></Label>
             </Ripple>
         </GridLayout>
     </ActionBar>

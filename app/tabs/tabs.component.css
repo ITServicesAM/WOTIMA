@@ -2,5 +2,12 @@ TabView {
     tab-background-color: #5c687c;
     tab-text-color: #FFFFFF;
     selected-tab-text-color: #FFFFFF;
-    selected-tab-highlight-color: #c2185b;
+    selected-tab-highlight-color: #c2185b
+}
+
+.profile-image {
+    border-radius: 50%;
+    padding: 8;
+    width: 48;
+    height: 48
 }

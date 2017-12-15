@@ -5,12 +5,14 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth-guard.service';
 import { WorktimeDetailComponent } from './worktime-detail/worktime-detail.component';
 import { WorktimeNewComponent } from './worktime-new/worktime-new.component';
+import { WorktimeProfileComponent } from "./worktime-profile/worktime-profile.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/tabs", pathMatch: "full"},
     {path: "tabs", loadChildren: "./tabs/tabs.module#TabsModule", canActivate: [AuthGuard]},
     {path: "worktime-detail/:id", component: WorktimeDetailComponent},
     {path: "worktime-new", component: WorktimeNewComponent},
+    {path: "worktime-profile", component: WorktimeProfileComponent},
     {path: "login", component: LoginComponent}
 ];
 

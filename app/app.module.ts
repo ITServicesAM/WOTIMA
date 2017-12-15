@@ -15,6 +15,7 @@ import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
 import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import firebase = require("nativescript-plugin-firebase/app");
+import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
@@ -45,6 +46,7 @@ firebase.initializeApp({
         LoginModule,
         WorktimeDetailModule,
         WorktimeNewModule,
+        WorktimeProfileModule,
         TNSFontIconModule.forRoot({
             'mdi': 'material-design-icons.css'
         })

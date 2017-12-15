@@ -4,6 +4,8 @@ import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-
 import { setTimeout } from 'tns-core-modules/timer';
 import { RouterExtensions } from 'nativescript-angular';
 import { BackendService } from '../services/backend.service';
+import { Observable } from "rxjs/Observable";
+import { User } from "nativescript-plugin-firebase";
 
 @Component({
     selector: "TabsComponent",
@@ -15,6 +17,7 @@ export class TabsComponent implements OnInit {
 
     private _title: string;
     public selectedTabIndex: number = 0;
+    public user$: Observable<User>;
 
     constructor(private router: RouterExtensions,
                 private backendService: BackendService) {
@@ -29,6 +32,7 @@ export class TabsComponent implements OnInit {
         * Use the "ngOnInit" handler to initialize data for the whole tab
         * navigation layout as a whole.
         *************************************************************/
+        this.user$ = this.backendService.getUser();
     }
 
     get title(): string {

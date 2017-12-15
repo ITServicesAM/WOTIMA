@@ -1,5 +1,5 @@
 import { getString, setString } from "application-settings";
-import { firestore, LoginType, User } from 'nativescript-plugin-firebase';
+import { LoginType, User } from 'nativescript-plugin-firebase';
 import { Injectable, NgZone } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { Moment } from 'moment';
@@ -43,6 +43,10 @@ export class BackendService {
     logout(): Promise<any> {
         BackendService.setToken("");
         return firebase.logout();
+    }
+
+    getUser(): Observable<User> {
+        return Observable.fromPromise(firebase.getCurrentUser());
     }
 
     createUser(user: User): Promise<void> {
@@ -166,8 +170,8 @@ export class BackendService {
         }).then(() => this.calculateWorktimeBudget(dateKey)).catch(err => this.utils.handleError(JSON.stringify(err)));
     }
 
-    saveWorktime(worktime: Worktime) {
-        return new Promise(executer => { });
+    saveWorktime(worktime: Worktime): Promise<any> {
+        return firebase.setValue(`workTimes/${BackendService.getToken()}/${worktime.date}`, worktime);
     }
 
     calculateWorktimeBudget(dateKey: string) {

@@ -132,8 +132,7 @@ export class WorktimeNewComponent implements OnInit {
         )).then(() => {
             console.log('successfully saved new worktime');
             this.router.backToPreviousPage();
-        })
-            .catch(err => this.utils.handleError(JSON.stringify(err)));
+        }).catch(err => this.utils.handleError(JSON.stringify(err)));
     }
 
     onPauseChange(value) {

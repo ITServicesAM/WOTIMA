@@ -1,0 +1,32 @@
+<ActionBar class="action-bar">
+    <GridLayout columns="auto,*" rows="*" width="100%">
+        <Ripple row="0" col="0" (tap)="onBackPressed()">
+            <Label verticalAlignment="center" horizontalAlignment="center" class="mdi p-8 text-center"
+                   [text]="'mdi-arrow-back' | fonticon"></Label>
+        </Ripple>
+        <Label
+                #lblActionBar
+                class="action-bar-title"
+                text="WOTIMA"
+                colSpan="2"
+                row="0"
+                col="0"
+                style.textAlignment="center"></Label>
+    </GridLayout>
+</ActionBar>
+<GridLayout columns="*" rows="*,2*">
+    <GridLayout row="0" class="btn-primary" columns="*" rows="3*,*,*">
+        <Image row="0" class="profile-image m-t-16" [src]="(user$ | async)?.profileImageURL" verticalAlignment="center"
+               stretch="aspectFill"
+               horizontalAlignment="center"></Image>
+        <Label *ngIf="(user$ | async)?.name" row="1" [text]="(user$ | async)?.name" verticalAlignment="center"
+               horizontalAlignment="center" class="h3" color="White"></Label>
+        <Label *ngIf="(user$ | async)?.email" row="2" [text]="(user$ | async)?.email" verticalAlignment="center"
+               class="m-b-16 text-muted h4" color="White"
+               horizontalAlignment="center"></Label>
+    </GridLayout>
+    <StackLayout row="1" verticalAlignment="center">
+        <Label text="hier kann man später das user objekt von der wotima app bearbeiten" textWrap="true"
+               class="text-center"></Label>
+    </StackLayout>
+</GridLayout>
