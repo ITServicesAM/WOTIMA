@@ -8,11 +8,11 @@ http://docs.nativescript.org/angular/code-samples/ui/tab-view
     <ActionBar class="action-bar">
         <GridLayout columns="auto,*,48" rows="*" verticalAlignment="center">
             <Ripple *ngIf="(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
-                    pageTransition="slideTop">
+                    pageTransition="slideRight">
                 <Image class="profile-image" [src]="(user$ | async)?.profileImageURL"></Image>
             </Ripple>
             <Ripple *ngIf="!(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
-                    pageTransition="slideTop">
+                    pageTransition="slideRight">
                 <Button class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Button>
             </Ripple>
             <Label horizontalAlignment="center"
@@ -24,7 +24,8 @@ http://docs.nativescript.org/angular/code-samples/ui/tab-view
                 <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
                        [text]="'mdi-lock-open' | fonticon"></Label>
             </Ripple>
-            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="2" (tap)="onAddWorktime()">
+            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="2" [nsRouterLink]="['/worktime-new']"
+                    pageTransition="slideLeft">
                 <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
                        [text]="'mdi-add' | fonticon"></Label>
             </Ripple>

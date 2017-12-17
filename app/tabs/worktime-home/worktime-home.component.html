@@ -1,24 +1,7 @@
-<!--<ActionBar class="action-bar">-->
-<!--<GridLayout class="m-r-16" columns="*,auto" rows="*">-->
-<!--<Label-->
-<!--#lblActionBar-->
-<!--class="action-bar-title"-->
-<!--text="WOTIMA"-->
-<!--row="0"-->
-<!--col="0"-->
-<!--colSpan="2"-->
-<!--style.textAlignment="center"></Label>-->
-<!--<Ripple row="0" col="1" (tap)="onSignOut()">-->
-<!--<Label class="mdi p-8" [text]="'mdi-lock-open' | fonticon"-->
-<!--android.position="actionBar" ios.position="right"></Label>-->
-<!--</Ripple>-->
-<!--</GridLayout>-->
-<!--</ActionBar>-->
-
-<StackLayout class="page" orientation="horizontal">
-    <ScrollView>
-        <GridLayout rows="*,auto,auto,*" columns="32,*,32" class="m-t-32">
-            <CardView row="1" col="1" elevation="40" radius="24" class="m-b-48">
+<ScrollView class="page">
+    <StackLayout verticalAlignment="center">
+        <GridLayout rows="*,auto,auto,*" columns="32,*,32">
+            <CardView row="1" col="1" elevation="40" radius="24" class="m-t-32 m-b-48">
                 <StackLayout class="p-16">
                     <Label class="text-center h3 font-weight-bold m-b-8" text="Aktuelles Arbeitszeitkonto"
                            textWrap="true"></Label>
@@ -44,5 +27,5 @@
                 </GridLayout>
             </CardView>
         </GridLayout>
-    </ScrollView>
-</StackLayout>
+    </StackLayout>
+</ScrollView>

@@ -2,7 +2,9 @@
     <ListView [items]="worktimes$ | async" separatorColor="Transparent">
         <ng-template let-item="item">
             <CardView elevation="40" radius="24" class="page m-16">
-                <Ripple (tap)="onEditWorktime(item)">
+                <!--<Ripple (tap)="onEditWorktime(item)">-->
+                <Ripple [nsRouterLink]="['/worktime-detail', item.date]"
+                        pageTransition="slideLeft">
                     <GridLayout rows="auto,auto" columns="*,auto" class="page p-16">
                         <Label row="0" col="0" class="h3 m-b-16 font-weight-bold"
                                [text]="item.workTimeStart | worktimeDate"></Label>
