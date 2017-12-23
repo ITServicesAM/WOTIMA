@@ -1,0 +1,41 @@
+<ScrollView class="page">
+    <StackLayout verticalAlignment="center">
+        <GridLayout rows="*,auto,*" columns="48,*,48">
+            <CardView row="1" col="1" elevation="40" radius="24" style.margin-top="48" style.margin-bottom="48">
+                <StackLayout>
+                    <StackLayout class="primary-dark">
+                        <Image src="~/images/icon.png" height="150" width="150" verticalAlignment="center"
+                               horizontalAlignment="center" class="m-b-24"></Image>
+                    </StackLayout>
+                    <StackLayout [formGroup]="signUpForm" class="p-16">
+                        <TextInputLayout hint="Bitte gib deine Email ein" class="m-t-4"
+                                         error="{{getErrorMessageEmail()}}">
+                            <TextField formControlName="email"
+                                       keyboardType="email" returnKeyType="next"></TextField>
+                        </TextInputLayout>
+                        <TextInputLayout hint="Bitte bestätige deine Email" class="m-t-4"
+                                         error="{{getErrorMessageEmail2()}}">
+                            <TextField formControlName="email2"
+                                       keyboardType="email" returnKeyType="next"></TextField>
+                        </TextInputLayout>
+                        <TextInputLayout hint="Bitte gib ein Passwort ein" class="m-t-4"
+                                         error="{{getErrorMessagePassword()}}">
+                            <TextField formControlName="password" secure="true" returnKeyType="next"></TextField>
+                        </TextInputLayout>
+                        <TextInputLayout hint="Bitte bestätige das Passwort" class="m-t-4"
+                                         error="{{getErrorMessagePassword2()}}">
+                            <TextField formControlName="password2" secure="true" returnKeyType="done"></TextField>
+                        </TextInputLayout>
+                        <Button class="btn btn-primary" marginLeft="0" marginRight="0" type="submit" text="Registrieren"
+                                [isEnabled]="signUpForm.valid" (tap)="onSignUp()"></Button>
+
+                    </StackLayout>
+                    <Ripple class="m-b-16" (tap)="onNavigateToSignIn()">
+                        <Label class="text-primary text-center p-8"
+                               text="Zurück zur Anmeldung"></Label>
+                    </Ripple>
+                </StackLayout>
+            </CardView>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>

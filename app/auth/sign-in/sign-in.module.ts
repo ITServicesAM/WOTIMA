@@ -1,6 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
-import { LoginComponent } from "./login.component";
+import { SignInComponent } from "./sign-in.component";
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 
 @NgModule({
@@ -8,11 +8,11 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
         NativeScriptCommonModule
     ],
     declarations: [
-        LoginComponent
+        SignInComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
     ]
 })
-export class LoginModule {
+export class SignInModule {
 }

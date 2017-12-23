@@ -70,7 +70,7 @@ export class TabsComponent implements OnInit {
     onSignOut() {
         setTimeout(() => {
             this.backendService.logout().then(() => {
-                this.router.navigate(['/login'], {clearHistory: true});
+                this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
             });
         }, 300);
     }

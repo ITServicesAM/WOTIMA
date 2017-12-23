@@ -1,0 +1,34 @@
+.logo_container {
+    background-color: #292929
+}
+
+.email_container {
+    background-color: #F44336;
+    padding-left: 16
+}
+
+.email_container > * {
+    color: white
+}
+
+.facebook_container {
+    background-color: #3B5998;
+    padding-left: 16
+}
+
+.facebook_container > * {
+    color: white
+}
+
+.google_container {
+    background-color: white;
+    padding-left: 16
+}
+
+.google_container > * {
+    color: #222222
+}
+
+.m-b-24 {
+    margin-bottom: 24
+}

@@ -1,12 +1,13 @@
 import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptSvgModule } from "nativescript-svg/angular";
 import { NSModuleFactoryLoader } from "nativescript-angular/router";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthGuard } from './auth-guard.service';
 import { BackendService } from './services/backend.service';
-import { LoginModule } from './auth/login/login.module';
+import { SignInModule } from './auth/sign-in/sign-in.module';
 import { UtilsService } from './services/utils.service';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
@@ -16,10 +17,12 @@ import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
 import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import firebase = require("nativescript-plugin-firebase/app");
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
+import { SignUpModule } from "./auth/sign-up/sign-up.module";
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
+elementRegistryModule.registerElement('SVGImage', () => require("nativescript-svg").SVGImage);
 
 firebase.initializeApp({
     persist: true,
@@ -43,7 +46,8 @@ firebase.initializeApp({
     imports: [
         NativeScriptModule,
         AppRoutingModule,
-        LoginModule,
+        SignInModule,
+        SignUpModule,
         WorktimeDetailModule,
         WorktimeNewModule,
         WorktimeProfileModule,

@@ -10,13 +10,13 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivate() {
-        if(BackendService.getToken()===""){
-            console.log("No User, Route can not be activated!");
-            this.router.navigate(["/login"]);
-            return false;
-        } else {
+        if (BackendService.isLoggedIn()) {
             console.log("There is a user, Route can be activated");
             return true;
+        } else {
+            console.log("No User, Route can not be activated!");
+            this.router.navigate(["/worktime-sign-in"]);
+            return false;
         }
     }
 }

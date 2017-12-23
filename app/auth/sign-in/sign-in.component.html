@@ -1,0 +1,55 @@
+<ScrollView class="page">
+    <StackLayout verticalAlignment="center">
+        <GridLayout rows="*,auto,*" columns="48,*,48">
+            <CardView row="1" col="1" elevation="40" radius="24" style.margin-top="48" style.margin-bottom="48">
+                <StackLayout>
+                    <StackLayout class="primary-dark">
+                        <Image src="~/images/icon.png" height="150" width="150" verticalAlignment="center"
+                               horizontalAlignment="center" class="m-b-24"></Image>
+                    </StackLayout>
+
+                    <StackLayout class="p-16">
+                        <CardView elevation="8" radius="0" class="m-8">
+                            <Ripple (tap)="onSignWithGoogle()">
+                                <StackLayout orientation="horizontal" class="google_container" height="56">
+                                    <Image src="~/images/google_icon.png" height="24" width="24"
+                                           verticalAlignment="center"></Image>
+                                    <Label text="Mit Google anmelden" class="m-l-16 h5"
+                                           verticalAlignment="center"></Label>
+                                </StackLayout>
+                            </Ripple>
+                        </CardView>
+
+                        <CardView elevation="8" radius="0" class="m-8">
+                            <Ripple (tap)="onSignWithFacebook()">
+                                <StackLayout orientation="horizontal" class="facebook_container" height="56">
+                                    <Image src="~/images/facebook_icon.png" height="24" width="24"
+                                           verticalAlignment="center"></Image>
+                                    <Label text="Mit Facebook anmelden" class="m-l-16 h5"
+                                           verticalAlignment="center"></Label>
+                                </StackLayout>
+                            </Ripple>
+                        </CardView>
+
+                        <CardView elevation="8" radius="0" class="m-8">
+                            <Ripple (tap)="onSignInWithEmail()">
+                                <StackLayout orientation="horizontal" class="email_container" height="56">
+                                    <Image src="~/images/email_icon.png" height="24" width="24"
+                                           verticalAlignment="center"></Image>
+                                    <Label text="Mit Email anmelden" class="m-l-16 h5"
+                                           verticalAlignment="center"></Label>
+                                </StackLayout>
+                            </Ripple>
+                        </CardView>
+
+                        <Ripple class="m-t-8" (tap)="onNavigateToSignUp()">
+                            <Label class="text-primary text-center p-8"
+                                   text="Noch kein Account? Jetzt registrieren"></Label>
+                        </Ripple>
+
+                    </StackLayout>
+                </StackLayout>
+            </CardView>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>
