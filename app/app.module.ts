@@ -1,7 +1,5 @@
-import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NativeScriptSvgModule } from "nativescript-svg/angular";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -15,14 +13,13 @@ import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
 import { WorktimeNewModule } from './worktime-new/worktime-new.module';
-import firebase = require("nativescript-plugin-firebase/app");
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
 import { SignUpModule } from "./auth/sign-up/sign-up.module";
+import firebase = require("nativescript-plugin-firebase/app");
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
-elementRegistryModule.registerElement('SVGImage', () => require("nativescript-svg").SVGImage);
 
 firebase.initializeApp({
     persist: true,
@@ -37,7 +34,7 @@ firebase.initializeApp({
     }
 }).then((instance) => {
     console.log(`Firebase init successful with instance: instance`, instance)
-}).catch(err => console.log("Firebase init failed!"));
+}).catch(err => console.log("Firebase init failed with error: ", err));
 
 @NgModule({
     bootstrap: [
@@ -59,7 +56,6 @@ firebase.initializeApp({
         AppComponent
     ],
     providers: [
-        {provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader},
         AuthGuard,
         BackendService,
         UtilsService
