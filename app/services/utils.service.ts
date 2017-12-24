@@ -7,7 +7,7 @@ export class UtilsService {
         // TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToBottom;
         // TNSFancyAlert.backgroundType = TNSFancyAlert.BACKGROUND_TYPES.Blur;
 
-        TNSFancyAlert.showError('Error', `errMsg`, 'ok');
+        TNSFancyAlert.showError('Error', `${errMsg}`, 'ok');
         console.log(`Error occurred with msg: ${errMsg}`);
     }
 

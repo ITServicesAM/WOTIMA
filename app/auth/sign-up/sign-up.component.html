@@ -10,30 +10,32 @@
                     <StackLayout [formGroup]="signUpForm" class="p-16">
                         <TextInputLayout hint="Bitte gib deine Email ein" class="m-t-4"
                                          error="{{getErrorMessageEmail()}}">
-                            <TextField formControlName="email"
+                            <TextField formControlName="email" class="input" hint="Bitte gib deine Email ein"
                                        keyboardType="email" returnKeyType="next"></TextField>
                         </TextInputLayout>
                         <TextInputLayout hint="Bitte bestätige deine Email" class="m-t-4"
                                          error="{{getErrorMessageEmail2()}}">
-                            <TextField formControlName="email2"
+                            <TextField formControlName="email2" class="input" hint="Bitte bestätige deine Email"
                                        keyboardType="email" returnKeyType="next"></TextField>
                         </TextInputLayout>
                         <TextInputLayout hint="Bitte gib ein Passwort ein" class="m-t-4"
                                          error="{{getErrorMessagePassword()}}">
-                            <TextField formControlName="password" secure="true" returnKeyType="next"></TextField>
+                            <TextField formControlName="password" secure="true" class="input"
+                                       hint="Bitte gib ein Passwort ein" returnKeyType="next"></TextField>
                         </TextInputLayout>
                         <TextInputLayout hint="Bitte bestätige das Passwort" class="m-t-4"
                                          error="{{getErrorMessagePassword2()}}">
-                            <TextField formControlName="password2" secure="true" returnKeyType="done"></TextField>
+                            <TextField formControlName="password2" secure="true" class="input"
+                                       hint="Bitte bestätige das Passwort" returnKeyType="done"></TextField>
                         </TextInputLayout>
                         <Button class="btn btn-primary" marginLeft="0" marginRight="0" type="submit" text="Registrieren"
                                 [isEnabled]="signUpForm.valid" (tap)="onSignUp()"></Button>
 
+                        <Ripple (tap)="onNavigateToSignIn()">
+                            <Label class="text-primary text-center p-8"
+                                   text="Zurück zur Anmeldung"></Label>
+                        </Ripple>
                     </StackLayout>
-                    <Ripple class="m-b-16" (tap)="onNavigateToSignIn()">
-                        <Label class="text-primary text-center p-8"
-                               text="Zurück zur Anmeldung"></Label>
-                    </Ripple>
                 </StackLayout>
             </CardView>
         </GridLayout>

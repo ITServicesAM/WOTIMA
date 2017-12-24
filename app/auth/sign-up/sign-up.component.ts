@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { RouterExtensions } from "nativescript-angular";
 import { Page } from "tns-core-modules/ui/page";
 import { WotimaValidators } from "../../validators/wotima.validators";
+import { BackendService } from '../../services/backend.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
     selector: "SignUpPage",
@@ -16,7 +18,9 @@ export class SignUpComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
                 private router: RouterExtensions,
-                private page: Page,) {
+                private page: Page,
+                private backend: BackendService,
+                private utils: UtilsService) {
         this.signUpForm = this.fb.group({
             "email": ["", [Validators.required, WotimaValidators.checkEmail]],
             "email2": ["", [Validators.required]],
@@ -31,6 +35,17 @@ export class SignUpComponent implements OnInit {
 
     onSignUp() {
         console.log(JSON.stringify(this.signUpForm.value));
+        this.backend.signUpWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.get('password').value)
+            .then(() => {
+                this.utils.showInfoDialog("Du musst deine Email Adresse bestätigen, bevor du dich damit anmelden kannst.");
+                this.router.navigate(["/worktime-sign-in"], {
+                    clearHistory: true,
+                    transition: {
+                        name: "slideRight",
+                        curve: "easeInOut"
+                    }
+                });
+            }).catch(err => this.utils.handleError(err));
     }
 
     getErrorMessageEmail(): string {

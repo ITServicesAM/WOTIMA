@@ -2,9 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { RouterExtensions } from "nativescript-angular";
 import { Page } from "tns-core-modules/ui/page";
-import { WotimaValidators } from "../../validators/wotima.validators"
-import * as app from "application";
-import { OrientationChangedEventData } from "tns-core-modules/application";
+import { WotimaValidators } from "../../validators/wotima.validators";
+import { BackendService } from '../../services/backend.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
     selector: "SignInEmailPage",
@@ -15,15 +15,12 @@ import { OrientationChangedEventData } from "tns-core-modules/application";
 export class SignInEmailComponent implements OnInit {
 
     public signInEmailForm: FormGroup;
-    public orientation: string = "portrait";
 
     constructor(private fb: FormBuilder,
                 private router: RouterExtensions,
-                private page: Page,) {
-        app.on("orientationChanged", (data: OrientationChangedEventData) => {
-            // console.log("OrientationChange detected: ", data);
-            this.orientation = data.newValue;
-        });
+                private page: Page,
+                private backend: BackendService,
+                private utils: UtilsService) {
         this.signInEmailForm = this.fb.group({
             "email": ["", [Validators.required, WotimaValidators.checkEmail]],
             "password": ["", [Validators.required, WotimaValidators.checkPasswordLength(8)]]
@@ -37,6 +34,21 @@ export class SignInEmailComponent implements OnInit {
 
     onSignInWithEmail() {
         console.log(JSON.stringify(this.signInEmailForm.value));
+        this.backend.signInWithEmail(this.signInEmailForm.value.email, this.signInEmailForm.value.password).then((user) => {
+                if (user.emailVerified) {
+                    this.backend.createUser(user);
+                    this.router.navigate(["/tabs"], {
+                        clearHistory: true,
+                        transition: {
+                            name: "slideRight",
+                            curve: "easeInOut"
+                        }
+                    });
+                }
+                else
+                    this.utils.showInfoDialog("Du musst deine Email Adresse zunächst bestätigen!");
+            }
+        ).catch(err => this.utils.handleError(err));
     }
 
     getErrorMessageEmail(): string {

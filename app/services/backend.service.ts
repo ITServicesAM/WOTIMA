@@ -14,14 +14,6 @@ const tokenKey = "token";
 @Injectable()
 export class BackendService {
 
-    static isLoggedIn(): Promise<boolean> {
-        return firebase.getCurrentUser().then(user => {
-            return user === null ? false : user.emailVerified;
-        }).catch(() => {
-            return false;
-        });
-    }
-
     static getToken(): string {
         return getString(tokenKey);
     }
@@ -34,6 +26,10 @@ export class BackendService {
     private _allWorktimes: Array<Worktime> = [];
 
     constructor(private utils: UtilsService, private ngZone: NgZone) {
+    }
+
+    getCurrentUser(): Promise<User> {
+        return firebase.getCurrentUser();
     }
 
     signInWithGoogle(): Promise<void> {
@@ -56,15 +52,6 @@ export class BackendService {
         }).catch(err => this.utils.handleError(err));
     }
 
-    signUpWithEmailAndPassword(email: string, password: string) {
-        return firebase.createUser({
-            email,
-            password
-        }).then(() => {
-            return firebase.sendEmailVerification();
-        }).catch(err => this.utils.handleError(err));
-    }
-
     signInWithEmail(email: string, password: string) {
         return firebase.login({
             type: LoginType.PASSWORD,
@@ -72,8 +59,15 @@ export class BackendService {
                 email,
                 password
             }
-        }).then((user) => {
-            return this.createUser(user);
+        });
+    }
+
+    signUpWithEmailAndPassword(email: string, password: string) {
+        return firebase.createUser({
+            email,
+            password
+        }).then(() => {
+            return firebase.sendEmailVerification();
         }).catch(err => this.utils.handleError(err));
     }
 

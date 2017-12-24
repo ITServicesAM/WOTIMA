@@ -12,13 +12,13 @@
                                          error="{{getErrorMessageEmail()}}">
                             <TextField formControlName="email"
                                        hint="Bitte gib deine Email Adresse ein"
-                                       class="input input-border"
+                                       class="input"
                                        keyboardType="email" returnKeyType="next"></TextField>
                         </TextInputLayout>
                         <TextInputLayout hint="Bitte gib dein Passwort ein"
                                          error="{{getErrorMessagePassword()}}">
                             <TextField formControlName="password" secure="true" returnKeyType="done"
-                                       hint="Bitte gib dein Passwort ein" class="input input-border"></TextField>
+                                       hint="Bitte gib dein Passwort ein" class="input"></TextField>
                         </TextInputLayout>
                         <Button class="btn btn-primary" marginLeft="0" marginRight="0" type="submit" text="Anmelden"
                                 [isEnabled]="signInEmailForm.valid" (tap)="onSignInWithEmail()"></Button>

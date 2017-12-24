@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { isAndroid } from "platform";
 import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view";
-import { setTimeout } from 'tns-core-modules/timer';
 import { RouterExtensions } from 'nativescript-angular';
 import { BackendService } from '../services/backend.service';
 import { Observable } from "rxjs/Observable";
@@ -68,11 +67,9 @@ export class TabsComponent implements OnInit {
     }
 
     onSignOut() {
-        setTimeout(() => {
-            this.backendService.logout().then(() => {
-                this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
-            });
-        }, 300);
+        this.backendService.logout().then(() => {
+            this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
+        });
     }
 
 
