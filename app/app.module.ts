@@ -7,7 +7,7 @@ import { AuthGuard } from './auth-guard.service';
 import { BackendService } from './services/backend.service';
 import { SignInModule } from './auth/sign-in/sign-in.module';
 import { UtilsService } from './services/utils.service';
-import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+import { TNSFontIconModule, TNSFontIconService } from 'nativescript-ngx-fonticon';
 
 import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
@@ -16,10 +16,13 @@ import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
 import { SignUpModule } from "./auth/sign-up/sign-up.module";
 import firebase = require("nativescript-plugin-firebase/app");
+import { SignInEmailModule } from "./auth/sign-in-email/sign-in-email.module";
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
+
+// TNSFontIconService.debug = true;
 
 firebase.initializeApp({
     persist: true,
@@ -44,6 +47,7 @@ firebase.initializeApp({
         NativeScriptModule,
         AppRoutingModule,
         SignInModule,
+        SignInEmailModule,
         SignUpModule,
         WorktimeDetailModule,
         WorktimeNewModule,

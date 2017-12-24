@@ -14,8 +14,12 @@ const tokenKey = "token";
 @Injectable()
 export class BackendService {
 
-    static isLoggedIn(): boolean {
-        return !!getString(tokenKey);
+    static isLoggedIn(): Promise<boolean> {
+        return firebase.getCurrentUser().then(user => {
+            return user === null ? false : user.emailVerified;
+        }).catch(() => {
+            return false;
+        });
     }
 
     static getToken(): string {
@@ -32,12 +36,45 @@ export class BackendService {
     constructor(private utils: UtilsService, private ngZone: NgZone) {
     }
 
-    loginWithGoogle(): Promise<void> {
+    signInWithGoogle(): Promise<void> {
         return firebase.login({
             type: LoginType.GOOGLE
         }).then((user) => {
             return this.createUser(user);
-        })
+        }).catch(err => this.utils.handleError(err));
+    }
+
+    signInWithFacebook(): Promise<any> {
+        return firebase.login({
+            type: LoginType.FACEBOOK,
+            facebookOptions: {
+                // defaults to ['public_profile', 'email']
+                scope: ['public_profile', 'email']
+            }
+        }).then((user) => {
+            return this.createUser(user);
+        }).catch(err => this.utils.handleError(err));
+    }
+
+    signUpWithEmailAndPassword(email: string, password: string) {
+        return firebase.createUser({
+            email,
+            password
+        }).then(() => {
+            return firebase.sendEmailVerification();
+        }).catch(err => this.utils.handleError(err));
+    }
+
+    signInWithEmail(email: string, password: string) {
+        return firebase.login({
+            type: LoginType.PASSWORD,
+            passwordOptions: {
+                email,
+                password
+            }
+        }).then((user) => {
+            return this.createUser(user);
+        }).catch(err => this.utils.handleError(err));
     }
 
     logout(): Promise<any> {
@@ -52,7 +89,7 @@ export class BackendService {
     createUser(user: User): Promise<void> {
         return firebase.update(`users/${BackendService.getToken()}`, {
             "email": user.email
-        });
+        })
     }
 
     loadWorktimes(): Observable<any> {

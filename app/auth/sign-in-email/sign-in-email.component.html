@@ -1,0 +1,35 @@
+<ScrollView class="page">
+    <StackLayout verticalAlignment="center">
+        <GridLayout rows="*,auto,*" columns="48,*,48">
+            <CardView row="1" col="1" elevation="40" radius="24" style.margin-top="48" style.margin-bottom="48">
+                <StackLayout>
+                    <StackLayout class="primary-dark">
+                        <Image src="~/images/icon.png" height="150" width="150" verticalAlignment="center"
+                               horizontalAlignment="center" class="m-b-24"></Image>
+                    </StackLayout>
+                    <StackLayout [formGroup]="signInEmailForm" class="p-16">
+                        <TextInputLayout hint="Bitte gib deine Email Adresse ein" class="m-t-4"
+                                         error="{{getErrorMessageEmail()}}">
+                            <TextField formControlName="email"
+                                       hint="Bitte gib deine Email Adresse ein"
+                                       class="input input-border"
+                                       keyboardType="email" returnKeyType="next"></TextField>
+                        </TextInputLayout>
+                        <TextInputLayout hint="Bitte gib dein Passwort ein"
+                                         error="{{getErrorMessagePassword()}}">
+                            <TextField formControlName="password" secure="true" returnKeyType="done"
+                                       hint="Bitte gib dein Passwort ein" class="input input-border"></TextField>
+                        </TextInputLayout>
+                        <Button class="btn btn-primary" marginLeft="0" marginRight="0" type="submit" text="Anmelden"
+                                [isEnabled]="signInEmailForm.valid" (tap)="onSignInWithEmail()"></Button>
+
+                        <Ripple (tap)="onNavigateToSignIn()">
+                            <Label class="text-primary text-center p-8"
+                                   text="Zurück zur Auswahl"></Label>
+                        </Ripple>
+                    </StackLayout>
+                </StackLayout>
+            </CardView>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>

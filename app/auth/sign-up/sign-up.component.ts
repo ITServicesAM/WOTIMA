@@ -98,7 +98,7 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['/worktime-sign-in'], {
             clearHistory: true,
             transition: {
-                name: "slideLeft",
+                name: "slideRight",
                 curve: "easeInOut"
             }
         });

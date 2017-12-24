@@ -26,7 +26,7 @@ export class SignInComponent implements OnInit {
     onSignWithGoogle(): void {
         this.busy = true;
         console.log("Login with Google clicked!");
-        this.backendService.loginWithGoogle().then(() => {
+        this.backendService.signInWithGoogle().then(() => {
             this.router.navigate(["/tabs"], {
                 clearHistory: true,
                 transition: {
@@ -35,9 +35,7 @@ export class SignInComponent implements OnInit {
                 }
             });
             this.busy = false;
-        }).catch(err => {
-            this.utils.handleError(err);
-        });
+        }).catch(err => this.utils.handleError(err));
     }
 
     onSignWithFacebook(): void {
@@ -52,7 +50,7 @@ export class SignInComponent implements OnInit {
 
     onSignInWithEmail(): void {
         console.log("Login with Email clicked!");
-        this.router.navigate(["/tabs"], {
+        this.router.navigate(["/worktime-sign-in-email"], {
             transition: {
                 name: "slideLeft",
                 curve: "easeInOut"

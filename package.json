@@ -61,7 +61,8 @@
     "webpack-sources": "~1.0.1"
   },
   "scripts": {
-    "clean": "rimraf node_modules && rimraf platforms && npm i"
+    "clean": "rimraf node_modules && rimraf platforms && npm i",
+    "run_android_aot": "tns run android --bundle --env.aot --env.uglify --env.snapshot"
   },
   "author": "ITServicesAM"
 }
