@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy } from '@angular/core';
 import { PageRoute, RouterExtensions } from 'nativescript-angular';
 import "rxjs/add/operator/switchMap";
 import { UtilsService } from '../services/utils.service';
@@ -8,6 +8,7 @@ import { Moment } from "moment";
 import moment = require("moment");
 import * as TimeDatePicker from 'nativescript-timedatepicker';
 import { Observable } from "rxjs/Observable";
+import { Subscription } from "rxjs/Subscription";
 
 @Component({
     selector: "worktime-detail",
@@ -15,11 +16,12 @@ import { Observable } from "rxjs/Observable";
     templateUrl: "./worktime-detail.component.html",
     styleUrls: ["./worktime-detail.component.css"]
 })
-export class WorktimeDetailComponent {
+export class WorktimeDetailComponent implements OnDestroy{
 
     dateKey: string;
     worktime: Worktime;
     worktime$: Observable<Worktime>;
+    worktimeSubscription: Subscription;
 
     constructor(private router: RouterExtensions,
                 private pageRoute: PageRoute,
@@ -34,29 +36,15 @@ export class WorktimeDetailComponent {
         });
     }
 
+    ngOnDestroy(): void {
+        this.worktimeSubscription.unsubscribe();
+    }
+
     loadWorktime() {
         this.worktime$ = this.backend.loadWorktime(this.dateKey);
-        this.worktime$.subscribe(data => {
+        this.worktimeSubscription = this.worktime$.subscribe(data => {
             this.worktime = data;
         });
-        // this.backend.loadWorktime(this.dateKey, (doc: DocumentSnapshot) => {
-        //     if (doc.exists) {
-        //         this.zone.run(() => {
-        //             let data = doc.data();
-        //             this.worktime = new Worktime(data.date,
-        //                 data.workTimeStart,
-        //                 data.workTimeEnd,
-        //                 data.reverseOrderDate,
-        //                 data.workingMinutesBrutto,
-        //                 data.workingMinutesNetto,
-        //                 data.workingMinutesOverTime,
-        //                 data.workingMinutesPause);
-        //             // this.utils.showInfoDialog(`Worktime: ${this.worktime}`);
-        //         });
-        //     } else {
-        //         this.utils.showInfoDialog(`Document not found, handle this error!`);
-        //     }
-        // });
     }
 
     onBackPressed() {

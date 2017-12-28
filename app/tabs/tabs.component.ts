@@ -5,6 +5,7 @@ import { RouterExtensions } from 'nativescript-angular';
 import { BackendService } from '../services/backend.service';
 import { Observable } from "rxjs/Observable";
 import { User } from "nativescript-plugin-firebase";
+import { isIOS } from "platform";
 
 @Component({
     selector: "TabsComponent",
@@ -13,7 +14,7 @@ import { User } from "nativescript-plugin-firebase";
     styleUrls: ["./tabs.component.css"]
 })
 export class TabsComponent implements OnInit {
-
+    isIOS: boolean = isIOS;
     private _title: string;
     public selectedTabIndex: number = 0;
     public user$: Observable<User>;
@@ -67,7 +68,7 @@ export class TabsComponent implements OnInit {
     }
 
     onSignOut() {
-        this.backendService.logout().then(() => {
+        this.backendService.signOut().then(() => {
             this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
         });
     }

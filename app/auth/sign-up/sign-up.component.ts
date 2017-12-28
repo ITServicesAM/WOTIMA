@@ -5,6 +5,8 @@ import { Page } from "tns-core-modules/ui/page";
 import { WotimaValidators } from "../../validators/wotima.validators";
 import { BackendService } from '../../services/backend.service';
 import { UtilsService } from '../../services/utils.service';
+import { openUrl } from "tns-core-modules/utils/utils";
+import { openApp } from "nativescript-open-app";
 
 @Component({
     selector: "SignUpPage",
@@ -34,10 +36,17 @@ export class SignUpComponent implements OnInit {
     }
 
     onSignUp() {
+        this.utils.showLoading();
         console.log(JSON.stringify(this.signUpForm.value));
-        this.backend.signUpWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.get('password').value)
-            .then(() => {
-                this.utils.showInfoDialog("Du musst deine Email Adresse bestätigen, bevor du dich damit anmelden kannst.");
+        this.backend.signUpWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.get('password').value).then(() => {
+            this.utils.hideLoading();
+            this.utils.showSnackBarWithAction("Du musst deine Email Adresse zunächst bestätigen!", "ok", (args) => {
+                if (args.command === "Action") {
+                    let appAvailable = openApp("com.google.android.gm", false);
+                    if (!appAvailable) {
+                        openUrl("mail.google.com");
+                    }
+                }
                 this.router.navigate(["/worktime-sign-in"], {
                     clearHistory: true,
                     transition: {
@@ -45,7 +54,11 @@ export class SignUpComponent implements OnInit {
                         curve: "easeInOut"
                     }
                 });
-            }).catch(err => this.utils.handleError(err));
+            });
+        }).catch(err => {
+            this.utils.handleError(err);
+            this.utils.hideLoading();
+        });
     }
 
     getErrorMessageEmail(): string {

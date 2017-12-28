@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BackendService } from '../../services/backend.service';
 import { RouterExtensions } from 'nativescript-angular';
 import { UtilsService } from '../../services/utils.service';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import 'moment/locale/de';
 import { Observable } from "rxjs/Observable";
+import { Subscription } from "rxjs/Subscription";
 
 @Component({
     selector: "worktime-home",
@@ -15,10 +16,11 @@ import { Observable } from "rxjs/Observable";
     templateUrl: "./worktime-home.component.html",
     styleUrls: ["./worktime-home.component.css"]
 })
-export class WorktimeHomeComponent implements OnInit {
+export class WorktimeHomeComponent implements OnInit, OnDestroy {
 
     public worktimeBudget$: Observable<any>;
     public worktime$: Observable<any>;
+    private workTimeSubscription: Subscription;
 
     curDate: string;
 
@@ -44,6 +46,10 @@ export class WorktimeHomeComponent implements OnInit {
         this.loadWorktime();
     }
 
+    ngOnDestroy(): void {
+        this.workTimeSubscription.unsubscribe();
+    }
+
     onEdit() {
         this.utils.showInfoDialog('OnEdit clicked!');
     }
@@ -55,7 +61,7 @@ export class WorktimeHomeComponent implements OnInit {
     loadWorktime() {
         let curTime: Moment = moment();
         this.worktime$ = this.backendService.loadWorktime(curTime.format("YYYY-MM-DD"));
-        this.worktime$.subscribe(data => {
+        this.workTimeSubscription = this.worktime$.subscribe(data => {
             // console.log(JSON.stringify(data));
             if (data != undefined) {
                 if (data.workTimeStart) {
@@ -88,7 +94,6 @@ export class WorktimeHomeComponent implements OnInit {
             }
         });
     }
-
 
     onChooseStarttime() {
         if (this.worktimeStartDateString === undefined) {

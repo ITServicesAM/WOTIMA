@@ -5,6 +5,9 @@ import { Page } from "tns-core-modules/ui/page";
 import { WotimaValidators } from "../../validators/wotima.validators";
 import { BackendService } from '../../services/backend.service';
 import { UtilsService } from '../../services/utils.service';
+import { openUrl } from "tns-core-modules/utils/utils";
+import { LoadingIndicator, OptionsCommon } from "nativescript-loading-indicator";
+import { openApp } from "nativescript-open-app";
 
 @Component({
     selector: "SignInEmailPage",
@@ -33,8 +36,10 @@ export class SignInEmailComponent implements OnInit {
     }
 
     onSignInWithEmail() {
+        this.utils.showLoading();
         console.log(JSON.stringify(this.signInEmailForm.value));
         this.backend.signInWithEmail(this.signInEmailForm.value.email, this.signInEmailForm.value.password).then((user) => {
+                this.utils.hideLoading();
                 if (user.emailVerified) {
                     this.backend.createUser(user);
                     this.router.navigate(["/tabs"], {
@@ -45,10 +50,23 @@ export class SignInEmailComponent implements OnInit {
                         }
                     });
                 }
-                else
-                    this.utils.showInfoDialog("Du musst deine Email Adresse zunächst bestätigen!");
+                else {
+                    this.backend.signOut();
+                    // this.utils.showInfoDialog("Du musst deine Email Adresse zunächst bestätigen!");
+                    this.utils.showSnackBarWithAction("Du musst deine Email Adresse zunächst bestätigen!", "ok", (args) => {
+                        if (args.command === "Action") {
+                            let appAvailable = openApp("com.google.android.gm", false);
+                            if (!appAvailable) {
+                                openUrl("mail.google.com");
+                            }
+                        }
+                    });
+                }
             }
-        ).catch(err => this.utils.handleError(err));
+        ).catch(err => {
+            this.utils.hideLoading();
+            this.utils.handleError(err);
+        });
     }
 
     getErrorMessageEmail(): string {

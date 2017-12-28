@@ -13,6 +13,17 @@
   font-size: 24;
 }
 
+.mdi-actionitem {
+  font-family: "Material Icons", "MaterialIcons-Regular";
+  font-size: 24;
+  padding: 8;
+}
+
+.mdi-actionitem.mdi-menu {
+  padding-left: 0;
+  margin-right: 0;
+}
+
 .root_element {
   height: 100%
 }

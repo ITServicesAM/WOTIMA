@@ -11,7 +11,6 @@ import { Page } from 'tns-core-modules/ui/page';
     styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-    busy: boolean = false;
 
     constructor(private page: Page,
                 private router: RouterExtensions,
@@ -24,7 +23,7 @@ export class SignInComponent implements OnInit {
     }
 
     onSignWithGoogle(): void {
-        this.busy = true;
+        this.utils.showLoading();
         console.log("Login with Google clicked!");
         this.backendService.signInWithGoogle().then(() => {
             this.router.navigate(["/tabs"], {
@@ -34,12 +33,17 @@ export class SignInComponent implements OnInit {
                     curve: "easeInOut"
                 }
             });
-            this.busy = false;
-        }).catch(err => this.utils.handleError(err));
+            this.utils.hideLoading();
+        }).catch(err => {
+            this.utils.handleError(err);
+            this.utils.hideLoading();
+        });
     }
 
     onSignWithFacebook(): void {
+        this.utils.showLoading();
         console.log("Login with Facebook clicked!");
+        this.utils.hideLoading();
         this.router.navigate(["/tabs"], {
             transition: {
                 name: "slideLeft",

@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { Worktime } from '../../models/worktime.interface';
 import { RouterExtensions } from 'nativescript-angular';
-import { Page } from 'tns-core-modules/ui/page';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
     selector: "worktime-list",
@@ -26,6 +24,5 @@ export class WorktimeListComponent implements OnInit {
 
     ngOnInit() {
         this.worktimes$ = this.backend.loadWorktimes();
-        // console.log(`WorktimesObservable: ${JSON.stringify(this.worktimes$)}`);
     }
 }

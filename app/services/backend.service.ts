@@ -71,7 +71,7 @@ export class BackendService {
         }).catch(err => this.utils.handleError(err));
     }
 
-    logout(): Promise<any> {
+    signOut(): Promise<any> {
         BackendService.setToken("");
         return firebase.logout();
     }

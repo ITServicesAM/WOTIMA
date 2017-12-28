@@ -13,7 +13,7 @@ http://docs.nativescript.org/angular/code-samples/ui/tab-view
             </Ripple>
             <Ripple *ngIf="!(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
                     pageTransition="slideRight">
-                <Button class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Button>
+                <Label class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Label>
             </Ripple>
             <Label horizontalAlignment="center"
                    class="action-bar-title"
