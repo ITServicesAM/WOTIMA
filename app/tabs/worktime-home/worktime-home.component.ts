@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
 import { BackendService } from '../../services/backend.service';
-import { RouterExtensions } from 'nativescript-angular';
+import { ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { UtilsService } from '../../services/utils.service';
 import * as TimeDatePicker from 'nativescript-timedatepicker';
 import { Page } from 'tns-core-modules/ui/page';
@@ -9,6 +9,7 @@ import { Moment } from 'moment';
 import 'moment/locale/de';
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
+import { WorktimeBudgetEditComponent } from "../../worktime-budget-edit/worktime-budget-edit.component";
 
 @Component({
     selector: "worktime-home",
@@ -34,7 +35,9 @@ export class WorktimeHomeComponent implements OnInit, OnDestroy {
     constructor(private page: Page,
                 private backendService: BackendService,
                 private router: RouterExtensions,
-                private utils: UtilsService) {
+                private utils: UtilsService,
+                private vcRef: ViewContainerRef,
+                private modalService: ModalDialogService) {
     }
 
     ngOnInit() {
@@ -51,7 +54,14 @@ export class WorktimeHomeComponent implements OnInit, OnDestroy {
     }
 
     onEdit() {
-        this.utils.showInfoDialog('OnEdit clicked!');
+        // this.utils.showInfoDialog('OnEdit clicked!');
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
+            fullscreen: false,
+        };
+
+        this.modalService.showModal(WorktimeBudgetEditComponent, options).then(() => {
+        });
     }
 
     loadWorktimeBudget() {

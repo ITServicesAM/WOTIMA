@@ -17,12 +17,14 @@ import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.modul
 import { SignUpModule } from "./auth/sign-up/sign-up.module";
 import firebase = require("nativescript-plugin-firebase/app");
 import { SignInEmailModule } from "./auth/sign-in-email/sign-in-email.module";
+import { WorktimeBudgetEditModule } from "./worktime-budget-edit/worktime-budget-edit.module";
+import { DeviceType } from "tns-core-modules/ui/enums";
+import { Config } from "./services/config";
+import { device } from "tns-core-modules/platform";
 
 elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
-
-// TNSFontIconService.debug = true;
 
 firebase.initializeApp({
     persist: true,
@@ -39,6 +41,8 @@ firebase.initializeApp({
     console.log(`Firebase init successful with instance: instance`, instance)
 }).catch(err => console.log("Firebase init failed with error: ", err));
 
+Config.isTablet = device.deviceType === DeviceType.Tablet;
+
 @NgModule({
     bootstrap: [
         AppComponent
@@ -52,6 +56,7 @@ firebase.initializeApp({
         WorktimeDetailModule,
         WorktimeNewModule,
         WorktimeProfileModule,
+        WorktimeBudgetEditModule,
         TNSFontIconModule.forRoot({
             'mdi': 'material-design-icons.css'
         })

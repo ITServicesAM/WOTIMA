@@ -28,11 +28,24 @@
   height: 100%
 }
 
-.font-weight-bold{
+.font-weight-bold {
   font-weight: bold;
+}
+
+.title {
+  font-size: 18;
+  font-weight: 600;
+  color: #292929;
 }
 
 .primary-dark {
   background-color: #292929;
   color: #ffffff;
+}
+
+.btn-primary-ab {
+  height: 48;
+  min-height: 48;
+  color: #ffffff;
+  background-color: #5c687c
 }

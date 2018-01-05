@@ -1,0 +1,11 @@
+<ScrollView [class.dimmed]="!isTablet">
+    <StackLayout class="modal-wrapper" verticalAlignment="center" [formGroup]="editWorktimeBudgetForm">
+        <Label text="Bearbeite dein Arbeitszeitkonto" class="title"></Label>
+        <TextInputLayout hint="Aktuelles Arbeitszeitkonto in Minuten" class="m-t-4"
+                         error="{{errorMsg}}">
+            <TextField formControlName="worktimeBudget" class="input" hint="Aktuelles Arbeitszeitkonto in Minuten"
+                       keyboardType="number" returnKeyType="done"></TextField>
+        </TextInputLayout>
+        <Button text="Speichern" class="btn btn-primary-ab" (tap)="onSaveWorktimeBudget()"></Button>
+    </StackLayout>
+</ScrollView>
