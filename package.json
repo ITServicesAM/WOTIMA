@@ -66,7 +66,8 @@
   "scripts": {
     "clean": "rimraf node_modules && rimraf platforms && npm i",
     "run_android_aot": "tns run android --bundle --env.aot --env.uglify --env.snapshot",
-    "build-android-bundle": "tns build android --bundle --env.aot --env.uglify --env.snapshot"
+    "build-android-bundle": "tns build android --bundle --env.uglify --env.snapshot",
+    "build-android-bundle-aot": "tns build android --bundle --env.aot --env.uglify --env.snapshot"
   },
   "author": "ITServicesAM"
 }
