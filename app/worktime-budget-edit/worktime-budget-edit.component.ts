@@ -14,8 +14,7 @@ const pageCommon = require("tns-core-modules/ui/page/page-common").PageBase;
     moduleId: module.id,
     templateUrl: "./worktime-budget-edit.component.html",
     styleUrls: [
-        "./worktime-budget-edit-common.css",
-        "./worktime-budget-edit.css"
+        "./worktime-budget-edit.component.css"
     ]
 })
 export class WorktimeBudgetEditComponent {
