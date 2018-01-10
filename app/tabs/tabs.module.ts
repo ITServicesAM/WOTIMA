@@ -8,9 +8,11 @@ import { WorktimeHomeComponent } from './worktime-home/worktime-home.component';
 import { WorktimeListComponent } from './worktime-list/worktime-list.component';
 import { NativeScriptUIListViewModule } from 'nativescript-pro-ui/listview/angular';
 import { WorktimePipesModule } from '../pipes/pipes.module';
+import { ToggleNavButtonModule } from "../directives/toggle-nav-button.module";
 
 @NgModule({
     imports: [
+        ToggleNavButtonModule,
         NativeScriptCommonModule,
         TabsRoutingModule,
         TNSFontIconModule,

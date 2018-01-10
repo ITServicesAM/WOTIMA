@@ -7,10 +7,9 @@ import { AuthGuard } from './auth-guard.service';
 import { BackendService } from './services/backend.service';
 import { SignInModule } from './auth/sign-in/sign-in.module';
 import { UtilsService } from './services/utils.service';
-import { TNSFontIconModule, TNSFontIconService } from 'nativescript-ngx-fonticon';
+import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
-import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
 import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
@@ -21,10 +20,12 @@ import { WorktimeBudgetEditModule } from "./worktime-budget-edit/worktime-budget
 import { DeviceType } from "tns-core-modules/ui/enums";
 import { Config } from "./services/config";
 import { device } from "tns-core-modules/platform";
+import { registerElement } from "nativescript-angular/element-registry";
 
-elementRegistryModule.registerElement("Ripple", () => require("nativescript-ripple").Ripple);
-elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
-elementRegistryModule.registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
+registerElement("Ripple", () => require("nativescript-ripple").Ripple);
+registerElement("CardView", () => require("nativescript-cardview").CardView);
+registerElement("Fab", () => require("nativescript-floatingactionbutton").Fab);
+registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
 
 firebase.initializeApp({
     persist: true,

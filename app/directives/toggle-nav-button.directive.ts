@@ -5,15 +5,22 @@ import { NavigationButton } from "ui/action-bar";
 import { Page } from "ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
 import * as app from "application";
+import { Label } from "tns-core-modules/ui/label";
 
 @Directive({
-    selector: "[sdkToggleNavButton]"
+    selector: "[toggleNavButton]"
 })
 export class ToggleNavButtonDirective implements OnInit {
     constructor(route: ActivatedRoute, private page: Page, private routerExtensions: RouterExtensions) {
         let navigationButton = this.createNavigationButton();
+        page.actionBar.className = "action-bar";
         page.actionBar.navigationButton = navigationButton;
-        // this.routerExtensions.canGoBackToPreviousPage()
+        let lblTitle = new Label();
+        lblTitle.text = "WOTIMA";
+        lblTitle.horizontalAlignment = "center";
+        lblTitle.className = "action-bar-title";
+        // page.actionBar.title = "WOTIMA";
+        page.actionBar.titleView = lblTitle;
     }
 
     ngOnInit() {
@@ -25,7 +32,7 @@ export class ToggleNavButtonDirective implements OnInit {
         navigationButton.visibility = "visible";
 
         if (app.android) {
-            navigationButton.icon = "res://ic_arrow_back_black_24dp";
+            navigationButton.icon = "res://ic_arrow_back_white_24dp";
             navigationButton.on("tap", (args: EventData) => {
                 this.routerExtensions.backToPreviousPage();
             });
@@ -37,7 +44,7 @@ export class ToggleNavButtonDirective implements OnInit {
     }
 
     toggleNavigationButtonVisibility(button: NavigationButton) {
-        if (button.actionBar.title === "NativeScript Code Samples") {
+        if (!this.routerExtensions.canGoBackToPreviousPage()) {
             button.visibility = "collapsed";
         }
     }

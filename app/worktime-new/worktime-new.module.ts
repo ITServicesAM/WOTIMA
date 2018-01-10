@@ -4,9 +4,11 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { WorktimePipesModule } from '../pipes/pipes.module';
 import { WorktimeNewComponent } from './worktime-new.component';
 import { NativeScriptFormsModule } from 'nativescript-angular';
+import { ToggleNavButtonModule } from "../directives/toggle-nav-button.module";
 
 @NgModule({
     imports: [
+        ToggleNavButtonModule,
         NativeScriptCommonModule,
         NativeScriptFormsModule,
         WorktimePipesModule,

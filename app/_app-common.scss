@@ -2,12 +2,27 @@
 // other than “light”, switch the path to the alternative scheme,
 // for example '~nativescript-theme-core/scss/dark'.
 @import '~nativescript-theme-core/scss/light';
+
 // Customize any of the theme’s variables here, for instance $btn-color: red;
+
+// ActionBar
+$ab-background: #292929;
+$ab-color: #ffffff;
+
 // Import the theme’s main ruleset.
 @import '~nativescript-theme-core/scss/index';
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
+.fab-button {
+  height: 70;
+  width: 70; /// this is required on iOS - Android does not require width so you might need to adjust styles
+  margin: 15;
+  background-color: #292929;
+  horizontal-align: right;
+  vertical-align: bottom;
+}
+
 .mdi {
   font-family: "Material Icons", "MaterialIcons-Regular";
   font-size: 24;

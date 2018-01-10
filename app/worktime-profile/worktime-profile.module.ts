@@ -4,9 +4,11 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular";
 import { TNSFontIconModule } from "nativescript-ngx-fonticon";
 import { WorktimeProfileComponent } from "./worktime-profile.component";
+import { ToggleNavButtonModule } from "../directives/toggle-nav-button.module";
 
 @NgModule({
     imports: [
+        ToggleNavButtonModule,
         NativeScriptCommonModule,
         NativeScriptFormsModule,
         WorktimePipesModule,

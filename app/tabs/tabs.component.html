@@ -4,33 +4,33 @@ tapping on some of the tabs or by swiping between the views.
 Learn more about the TabView component in this documentation article:
 http://docs.nativescript.org/angular/code-samples/ui/tab-view
 -->
-<TabView (selectedIndexChanged)="onSelectedIndexChanged($event)" class="tab-view" [(ngModel)]="selectedTabIndex">
-    <ActionBar class="action-bar">
-        <GridLayout columns="auto,*,48" rows="*" verticalAlignment="center">
-            <Ripple *ngIf="(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
-                    pageTransition="slideRight">
-                <Image class="profile-image" [src]="(user$ | async)?.profileImageURL"></Image>
-            </Ripple>
-            <Ripple *ngIf="!(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"
-                    pageTransition="slideRight">
-                <Label class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Label>
-            </Ripple>
-            <Label horizontalAlignment="center"
-                   class="action-bar-title"
-                   text="WOTIMA"
-                   row="0"
-                   col="1"></Label>
-            <Ripple *ngIf="selectedTabIndex === 0" row="0" col="2" (tap)="onSignOut()">
-                <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
-                       [text]="'mdi-lock-open' | fonticon"></Label>
-            </Ripple>
-            <Ripple *ngIf="selectedTabIndex === 1" row="0" col="2" [nsRouterLink]="['/worktime-new']"
-                    pageTransition="slideLeft">
-                <Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"
-                       [text]="'mdi-add' | fonticon"></Label>
-            </Ripple>
-        </GridLayout>
-    </ActionBar>
+<TabView toggleNavButton (selectedIndexChanged)="onSelectedIndexChanged($event)" class="tab-view" [(ngModel)]="selectedTabIndex">
+    <!--<ActionBar class="action-bar">-->
+        <!--<GridLayout columns="auto,*,48" rows="*" verticalAlignment="center">-->
+            <!--<Ripple *ngIf="(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"-->
+                    <!--pageTransition="slideRight">-->
+                <!--<Image class="profile-image" [src]="(user$ | async)?.profileImageURL"></Image>-->
+            <!--</Ripple>-->
+            <!--<Ripple *ngIf="!(user$ | async)?.profileImageURL" row="0" col="0" [nsRouterLink]="['/worktime-profile']"-->
+                    <!--pageTransition="slideRight">-->
+                <!--<Label class="mdi text-center p-8" [text]="'mdi-account-circle' | fonticon"></Label>-->
+            <!--</Ripple>-->
+            <!--<Label horizontalAlignment="center"-->
+                   <!--class="action-bar-title"-->
+                   <!--text="WOTIMA"-->
+                   <!--row="0"-->
+                   <!--col="1"></Label>-->
+            <!--<Ripple *ngIf="selectedTabIndex === 0" row="0" col="2" (tap)="onSignOut()">-->
+                <!--<Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"-->
+                       <!--[text]="'mdi-lock-open' | fonticon"></Label>-->
+            <!--</Ripple>-->
+            <!--<Ripple *ngIf="selectedTabIndex === 1" row="0" col="2" [nsRouterLink]="['/worktime-new']"-->
+                    <!--pageTransition="slideLeft">-->
+                <!--<Label verticalAlignment="center" horizontalAlignment="center" class="mdi text-center"-->
+                       <!--[text]="'mdi-add' | fonticon"></Label>-->
+            <!--</Ripple>-->
+        <!--</GridLayout>-->
+    <!--</ActionBar>-->
     <!--
     To add a new TabView item, add a new layout component with a tabItem Angular directive.
     Assign the tabItem directive an object that declares the tab item button's title and icon source.

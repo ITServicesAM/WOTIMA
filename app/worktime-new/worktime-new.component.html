@@ -1,20 +1,20 @@
-<ActionBar class="action-bar">
-    <GridLayout class="m-r-16" columns="auto,*" rows="*">
-        <Ripple row="0" col="0" (tap)="onBackPressed()">
-            <Label class="mdi p-8" [text]="'mdi-arrow-back' | fonticon"></Label>
-        </Ripple>
-        <Label
-                #lblActionBar
-                class="action-bar-title"
-                text="WOTIMA"
-                colSpan="2"
-                row="0"
-                col="0"
-                style.textAlignment="center"></Label>
-    </GridLayout>
-</ActionBar>
+<!--<ActionBar class="action-bar">-->
+    <!--<GridLayout class="m-r-16" columns="auto,*" rows="*">-->
+        <!--<Ripple row="0" col="0" (tap)="onBackPressed()">-->
+            <!--<Label class="mdi p-8" [text]="'mdi-arrow-back' | fonticon"></Label>-->
+        <!--</Ripple>-->
+        <!--<Label-->
+                <!--#lblActionBar-->
+                <!--class="action-bar-title"-->
+                <!--text="WOTIMA"-->
+                <!--colSpan="2"-->
+                <!--row="0"-->
+                <!--col="0"-->
+                <!--style.textAlignment="center"></Label>-->
+    <!--</GridLayout>-->
+<!--</ActionBar>-->
 
-<ScrollView class="page">
+<ScrollView toggleNavButton class="page">
     <StackLayout orientation="vertical">
         <CardView elevation="40" radius="24" class="m-16">
             <StackLayout orientation="vertical">

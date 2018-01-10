@@ -1,21 +1,21 @@
-<ActionBar class="action-bar">
-    <GridLayout columns="auto,*" rows="*" width="100%">
-        <Ripple row="0" col="0" (tap)="onBackPressed()">
-            <Label verticalAlignment="center" horizontalAlignment="center" class="mdi p-8 text-center"
-                   [text]="'mdi-arrow-back' | fonticon"></Label>
-        </Ripple>
-        <Label
-                #lblActionBar
-                class="action-bar-title"
-                text="WOTIMA"
-                colSpan="2"
-                row="0"
-                col="0"
-                style.textAlignment="center"></Label>
-    </GridLayout>
-</ActionBar>
+<!--<ActionBar class="action-bar">-->
+    <!--<GridLayout columns="auto,*" rows="*" width="100%">-->
+        <!--<Ripple row="0" col="0" (tap)="onBackPressed()">-->
+            <!--<Label verticalAlignment="center" horizontalAlignment="center" class="mdi p-8 text-center"-->
+                   <!--[text]="'mdi-arrow-back' | fonticon"></Label>-->
+        <!--</Ripple>-->
+        <!--<Label-->
+                <!--#lblActionBar-->
+                <!--class="action-bar-title"-->
+                <!--text="WOTIMA"-->
+                <!--colSpan="2"-->
+                <!--row="0"-->
+                <!--col="0"-->
+                <!--style.textAlignment="center"></Label>-->
+    <!--</GridLayout>-->
+<!--</ActionBar>-->
 
-<ScrollView>
+<ScrollView toggleNavButton>
     <StackLayout orientation="vertical">
         <StackLayout class="primary-dark">
             <StackLayout class="m-t-30 m-b-30"
