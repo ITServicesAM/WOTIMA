@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Config } from "../services/config";
 import { Page } from "tns-core-modules/ui/page";
 import { ModalDialogParams } from "nativescript-angular";
@@ -6,6 +6,8 @@ import { Color } from "tns-core-modules/color";
 import { addTabletCss } from "../services/tablet-utils";
 import * as utils from 'utils/utils';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { BackendService } from "../services/backend.service";
+import { Subscription } from "rxjs/Subscription";
 
 const pageCommon = require("tns-core-modules/ui/page/page-common").PageBase;
 
@@ -17,13 +19,14 @@ const pageCommon = require("tns-core-modules/ui/page/page-common").PageBase;
         "./worktime-budget-edit.component.css"
     ]
 })
-export class WorktimeBudgetEditComponent {
+export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
 
-    isTablet: boolean = Config.isTablet;
+    worktimeBudget: number;
+    subscriptionWorktimeBudget: Subscription;
     editWorktimeBudgetForm: FormGroup;
-    errorMsg = "Wird benötigt";
 
     constructor(private params: ModalDialogParams,
+                private backend: BackendService,
                 private fb: FormBuilder,
                 private page: Page) {
 
@@ -73,7 +76,19 @@ export class WorktimeBudgetEditComponent {
         addTabletCss(this.page, "worktime-budget-edit");
     }
 
-    onSaveWorktimeBudget() {
+    ngOnInit(): void {
+        this.subscriptionWorktimeBudget = this.backend.loadWorktimeBudget().subscribe(data => {
+            this.worktimeBudget = data;
+        });
+    }
 
+    ngOnDestroy(): void {
+        this.subscriptionWorktimeBudget.unsubscribe();
+    }
+
+    onSaveWorktimeBudget() {
+        this.backend.saveWorktimeBudget(this.worktimeBudget).then(() => {
+            this.params.closeCallback();
+        }).catch(err => console.log(JSON.stringify(err)));
     }
 }

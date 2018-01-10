@@ -3,8 +3,8 @@
         <StackLayout class="modal-content-frame">
             <!--<Label text="Bearbeite dein Arbeitszeitkonto" class="title"></Label>-->
             <TextInputLayout hint="Aktuelles Arbeitszeitkonto in Minuten" error="{{getErrorMsg()}}">
-                <TextField formControlName="worktimeBudget" class="input" hint="Aktuelles Arbeitszeitkonto in Minuten"
-                           keyboardType="number" returnKeyType="done"></TextField>
+                <TextField formControlName="worktimeBudget" class="input " hint="Aktuelles Arbeitszeitkonto in Minuten"
+                           keyboardType="number" returnKeyType="done" [(ngModel)]="worktimeBudget"></TextField>
             </TextInputLayout>
         </StackLayout>
         <Button text="Speichern" class="btn-primary-dark full-btn" (tap)="onSaveWorktimeBudget()"></Button>

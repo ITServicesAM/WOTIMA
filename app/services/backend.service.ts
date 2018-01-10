@@ -121,7 +121,7 @@ export class BackendService {
         return this._allWorktimes;
     }
 
-    publishUpdates() {
+    private publishUpdates() {
         this._allWorktimes.sort(function (a, b) {
             if (a.reverseOrderDate < b.reverseOrderDate) return -1;
             if (a.reverseOrderDate > b.reverseOrderDate) return 1;
@@ -153,6 +153,11 @@ export class BackendService {
                 });
             });
         }).share();
+    }
+
+    saveWorktimeBudget(worktimeBudget: number): Promise<any> {
+        let path = `overTimeBudgets/${BackendService.getToken()}/overTimeBudget`;
+        return firebase.setValue(path,worktimeBudget);
     }
 
     loadWorktime(dateKey: string): Observable<any> {
