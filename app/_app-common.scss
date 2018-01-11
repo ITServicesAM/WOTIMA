@@ -15,10 +15,10 @@ $ab-color: #ffffff;
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
 .fab-button {
-  height: 70;
-  width: 70; /// this is required on iOS - Android does not require width so you might need to adjust styles
+  height: 56;
+  width: 56; /// this is required on iOS - Android does not require width so you might need to adjust styles
   margin: 15;
-  background-color: #292929;
+  background-color: #741b47;
   horizontal-align: right;
   vertical-align: bottom;
 }
@@ -39,8 +39,8 @@ $ab-color: #ffffff;
   margin-right: 0;
 }
 
-.root_element {
-  height: 100%
+.height_100{
+  height:100%;
 }
 
 .font-weight-bold {

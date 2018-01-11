@@ -15,11 +15,11 @@ export class ToggleNavButtonDirective implements OnInit {
         let navigationButton = this.createNavigationButton();
         page.actionBar.className = "action-bar";
         page.actionBar.navigationButton = navigationButton;
+        page.actionBar.flat = this.routerExtensions.router.url === "/tabs";
         let lblTitle = new Label();
         lblTitle.text = "WOTIMA";
         lblTitle.horizontalAlignment = "center";
         lblTitle.className = "action-bar-title";
-        // page.actionBar.title = "WOTIMA";
         page.actionBar.titleView = lblTitle;
     }
 

@@ -21,4 +21,8 @@ export class Worktime {
         this.workingMinutesOverTime = workingMinutesOverTime ? workingMinutesOverTime : 0;
         this.workingMinutesPause = workingMinutesPause ? workingMinutesPause : 0;
     }
+
+    toString(){
+        return "toString override";
+    }
 }

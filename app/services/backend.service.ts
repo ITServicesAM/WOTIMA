@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 import firebase = require("nativescript-plugin-firebase");
 import moment = require("moment");
+import { forEach } from "@angular/router/src/utils/collection";
 
 const tokenKey = "token";
 
@@ -23,7 +24,7 @@ export class BackendService {
     }
 
     // worktimes: BehaviorSubject<Array<Worktime>> = new BehaviorSubject([]);
-    private _allWorktimes: Array<Worktime> = [];
+    private _allWorktimes: Worktime[] = [];
 
     constructor(private utils: UtilsService, private ngZone: NgZone) {
     }
@@ -86,21 +87,35 @@ export class BackendService {
         })
     }
 
-    loadWorktimes(): Observable<any> {
+    loadWorktimes(month: number): Observable<any> {
+        this._allWorktimes = [];
         return new Observable((observer: any) => {
-            let path = `workTimes/${BackendService.getToken()}`;
-            let onValueEvent = (snapshot: any) => {
+            observer.next(null);
+            let path = `/workTimes/${BackendService.getToken()}`;
+            let onQueryEvent = (querySnapshot: firebase.FBData) => {
                 this.ngZone.run(() => {
-                    let results = this.handleSnapshot(snapshot.value);
-                    // console.log(JSON.stringify(results));
+                    console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
+                    let results = this.handleSnapshot(querySnapshot);
                     observer.next(results);
                 });
             };
-            firebase.addValueEventListener(onValueEvent, `/${path}`).then(() => {
-                this.ngZone.run(() => {
-                    // console.log('eventlistener added');
-                })
-            }).catch(err => {
+            firebase.query(onQueryEvent, path, {
+                range: {
+                    type: firebase.QueryRangeType.EQUAL_TO,
+                    value: month
+                },
+                orderBy: {
+                    type: firebase.QueryOrderByType.CHILD,
+                    value: 'month'
+                }
+            })
+            // ;
+            // firebase.addValueEventListener(onQueryEvent, path)
+                .then(() => {
+                    this.ngZone.run(() => {
+                        console.log('query added');
+                    })
+                }).catch(err => {
                 this.ngZone.run(() => {
                     this.utils.handleError(err);
                 });
@@ -108,16 +123,38 @@ export class BackendService {
         }).share();
     }
 
-    handleSnapshot(data: any) {
-        //empty array, then refill and filter
-        this._allWorktimes = [];
-        if (data) {
-            for (let id in data) {
-                let result = (Object).assign({id: id}, data[id]);
-                this._allWorktimes.push(result);
-            }
-            this.publishUpdates();
+    handleSnapshot(data: firebase.FBData): Worktime[] {
+        if (data.type === "ChildAdded") {
+            let alreadyAdded = false;
+            this._allWorktimes.forEach(worktime => {
+                if (worktime.date === data.key)
+                    alreadyAdded = true;
+
+            });
+            if (!alreadyAdded)
+                this._allWorktimes.push(data.value);
         }
+        if (data.type === "ChildRemoved") {
+            this._allWorktimes.forEach(worktime => {
+                if (worktime.date === data.key) {
+                    this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1);
+                }
+            });
+        }
+        if (data.type === "ChildChanged") {
+            this._allWorktimes.forEach(worktime => {
+                if (worktime.date === data.key) {
+                    this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1, worktime);
+                }
+            });
+        }
+        this.publishUpdates();
+        // if (data) {
+        //     this._allWorktimes.push(...data);
+        //     // for (let date in data) {
+        //     //     this._allWorktimes.push(data);
+        //     // }
+        // }
         return this._allWorktimes;
     }
 
@@ -157,7 +194,7 @@ export class BackendService {
 
     saveWorktimeBudget(worktimeBudget: number): Promise<any> {
         let path = `overTimeBudgets/${BackendService.getToken()}/overTimeBudget`;
-        return firebase.setValue(path,worktimeBudget);
+        return firebase.setValue(path, worktimeBudget);
     }
 
     loadWorktime(dateKey: string): Observable<any> {

@@ -1,32 +1,37 @@
-<ScrollView class="page">
-    <StackLayout verticalAlignment="center">
-        <GridLayout rows="*,auto,auto,*" columns="32,*,32">
-            <CardView row="1" col="1" elevation="40" radius="24" class="m-t-32 m-b-24">
-                <StackLayout class="p-16">
-                    <Label class="text-center h3 font-weight-bold m-b-8" text="Aktuelles Arbeitszeitkonto"
-                           textWrap="true"></Label>
-                    <Label class="text-center h3" [text]="(worktimeBudget$ | async) | worktimeBudget"></Label>
-                    <Ripple class="m-t-16">
-                        <Button class="btn btn-outline" text="Bearbeiten" (tap)="onEdit()"></Button>
-                    </Ripple>
-                </StackLayout>
-            </CardView>
-            <CardView row="2" col="1" elevation="40" radius="24" class="m-b-32">
-                <GridLayout rows="auto,auto,auto,auto,auto" columns="*" class="p-16">
-                    <Label row="0" [text]="curDate" class="h3 m-b-16 font-weight-bold"></Label>
-                    <Ripple row="1">
-                        <Button class="btn btn-primary no-margin no-padding" [text]="worktimeStartString"
-                                (tap)="onChooseStarttime()"></Button>
-                    </Ripple>
-                    <Ripple row="2">
-                        <Button class="btn btn-primary  no-margin" [text]="worktimeEndString"
-                                (tap)="onChooseEndtime()"></Button>
-                    </Ripple>
-                    <Label *ngIf="worktimePauseString" row="3" [text]="worktimePauseString" class="h4"></Label>
-                    <Label *ngIf="worktimeOvertimeString" row="4" [text]="worktimeOvertimeString" class="h4"></Label>
-                </GridLayout>
-            </CardView>
-        </GridLayout>
-        <FAB (tap)="fabTap()" icon="res://ic_add_white_24dp" rippleColor="#f1f1f1" class="fab-button"></FAB>
-    </StackLayout>
-</ScrollView>
+<GridLayout rows="*" height="100%" width="100%">
+    <ScrollView row="1" class="page ">
+        <StackLayout verticalAlignment="center">
+            <GridLayout rows="*,auto,auto,*" columns="32,*,32">
+                <CardView row="1" col="1" elevation="40" radius="24" class="m-t-32 m-b-24">
+                    <StackLayout class="p-16">
+                        <Label class="text-center h3 font-weight-bold m-b-8" text="Aktuelles Arbeitszeitkonto"
+                               textWrap="true"></Label>
+                        <Label class="text-center h3" [text]="(worktimeBudget$ | async) | worktimeBudget"></Label>
+                        <Ripple class="m-t-16">
+                            <Button class="btn btn-outline" text="Bearbeiten" (tap)="onEdit()"></Button>
+                        </Ripple>
+                    </StackLayout>
+                </CardView>
+                <CardView row="2" col="1" elevation="40" radius="24" class="m-b-32">
+                    <GridLayout rows="auto,auto,auto,auto,auto" columns="*" class="p-16">
+                        <Label row="0" [text]="curDate" class="h3 m-b-16 font-weight-bold"></Label>
+                        <Ripple row="1">
+                            <Button class="btn btn-primary no-margin no-padding" [text]="worktimeStartString"
+                                    (tap)="onChooseStarttime()"></Button>
+                        </Ripple>
+                        <Ripple row="2">
+                            <Button class="btn btn-primary  no-margin" [text]="worktimeEndString"
+                                    (tap)="onChooseEndtime()"></Button>
+                        </Ripple>
+                        <Label *ngIf="worktimePauseString" row="3" [text]="worktimePauseString" class="h4"></Label>
+                        <Label *ngIf="worktimeOvertimeString" row="4" [text]="worktimeOvertimeString"
+                               class="h4"></Label>
+                    </GridLayout>
+                </CardView>
+            </GridLayout>
+        </StackLayout>
+    </ScrollView>
+    <!--<FAB row="1" (tap)="fabTap()" icon="res://ic_add_white_24dp" rippleColor="#292929" class="fab-button"></FAB>-->
+</GridLayout>
+
+
