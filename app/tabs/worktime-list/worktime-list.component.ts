@@ -5,6 +5,7 @@ import { RouterExtensions } from 'nativescript-angular';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { switchMap } from "rxjs/operators";
+import { WorktimeDateRange } from "../../models/worktime-date-range.interface";
 
 @Component({
     selector: "worktime-list",
@@ -16,7 +17,9 @@ import { switchMap } from "rxjs/operators";
 export class WorktimeListComponent implements OnInit {
 
     public worktimes$: Observable<any>;
-    private month$: BehaviorSubject<number>;
+    private month$: BehaviorSubject<WorktimeDateRange>;
+    public showLoading: boolean = true;
+    public dates: string[] = ['2018', '2017'];
 
     constructor(private backend: BackendService,
                 private router: RouterExtensions) { }
@@ -26,18 +29,20 @@ export class WorktimeListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.month$ = new BehaviorSubject<number>(11);
+        this.month$ = new BehaviorSubject<WorktimeDateRange>(new WorktimeDateRange('2017-05-01', '2017-05-31'));
         this.worktimes$ = this.month$.pipe(
-            switchMap((month: number) => {
-                return this.backend.loadWorktimes(month);
+            switchMap((worktimeDateRange: WorktimeDateRange) => {
+                return this.backend.loadWorktimes(worktimeDateRange);
             })
         );
         this.worktimes$.subscribe(value => {
-            console.log(JSON.stringify(value));
+            this.showLoading = false;
+            // console.log(JSON.stringify(value));
         });
     }
 
     nextDate() {
-        this.month$.next(this.month$.getValue() == 11 ? 0 : this.month$.getValue() + 1);
+        this.showLoading = true;
+        this.month$.next(new WorktimeDateRange('2018-01-01', '2018-01-31'));
     }
 }

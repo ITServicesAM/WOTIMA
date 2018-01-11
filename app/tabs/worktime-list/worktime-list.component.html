@@ -1,6 +1,7 @@
-<StackLayout class="page height_100 p-16" orientation="vertical">
-    <Button class="btn btn-active" text="Next date" (tap)="nextDate()"></Button>
-    <ListView [items]="worktimes$ | async" separatorColor="Transparent">
+<GridLayout rows="60, *" class="page height_100 p-16">
+    <ListPicker [items]="dates" selectedIndex="0" (selectedIndexChange)="selectedIndexChanged($event)" class="p-15"></ListPicker>
+    <!--<Button row="0" class="btn btn-active" text="Next date" (tap)="nextDate()"></Button>-->
+    <ListView row="1" [items]="worktimes$ | async" separatorColor="Transparent">
         <ng-template let-item="item">
             <CardView elevation="40" radius="24" class="page m-16">
                 <!--<Ripple (tap)="onEditWorktime(item)">-->
@@ -18,4 +19,6 @@
             </CardView>
         </ng-template>
     </ListView>
-</StackLayout>
+    <ActivityIndicator row="1" busy="true" width="48" height="48" horizontalAlignment="center"
+                       verticalAlignment="center" class="activity-indicator"></ActivityIndicator>
+</GridLayout>

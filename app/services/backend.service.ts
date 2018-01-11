@@ -9,6 +9,7 @@ import 'rxjs/add/operator/share';
 import firebase = require("nativescript-plugin-firebase");
 import moment = require("moment");
 import { forEach } from "@angular/router/src/utils/collection";
+import { WorktimeDateRange } from "../models/worktime-date-range.interface";
 
 const tokenKey = "token";
 
@@ -87,39 +88,43 @@ export class BackendService {
         })
     }
 
-    loadWorktimes(month: number): Observable<any> {
+    loadWorktimes(worktimeDateRange: WorktimeDateRange): Observable<any> {
         this._allWorktimes = [];
         return new Observable((observer: any) => {
             observer.next(null);
             let path = `/workTimes/${BackendService.getToken()}`;
             let onQueryEvent = (querySnapshot: firebase.FBData) => {
                 this.ngZone.run(() => {
-                    console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
+                    // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
                     let results = this.handleSnapshot(querySnapshot);
                     observer.next(results);
                 });
             };
             firebase.query(onQueryEvent, path, {
-                range: {
-                    type: firebase.QueryRangeType.EQUAL_TO,
-                    value: month
-                },
+                ranges: [
+                    {
+                        type: firebase.QueryRangeType.START_AT,
+                        value: worktimeDateRange.startAtDate
+                    },
+                    {
+                        type: firebase.QueryRangeType.END_AT,
+                        value: worktimeDateRange.endAtDate
+                    }
+                ],
                 orderBy: {
                     type: firebase.QueryOrderByType.CHILD,
-                    value: 'month'
+                    value: 'date'
                 }
             })
-            // ;
-            // firebase.addValueEventListener(onQueryEvent, path)
-                .then(() => {
-                    this.ngZone.run(() => {
-                        console.log('query added');
-                    })
-                }).catch(err => {
-                this.ngZone.run(() => {
-                    this.utils.handleError(err);
-                });
-            });
+            // .then(() => {
+            //     this.ngZone.run(() => {
+            //         console.log('query added');
+            //     })
+            // }).catch(err => {
+            //     this.ngZone.run(() => {
+            //         this.utils.handleError(err);
+            //     });
+            // });
         }).share();
     }
 
@@ -129,7 +134,6 @@ export class BackendService {
             this._allWorktimes.forEach(worktime => {
                 if (worktime.date === data.key)
                     alreadyAdded = true;
-
             });
             if (!alreadyAdded)
                 this._allWorktimes.push(data.value);
@@ -149,12 +153,6 @@ export class BackendService {
             });
         }
         this.publishUpdates();
-        // if (data) {
-        //     this._allWorktimes.push(...data);
-        //     // for (let date in data) {
-        //     //     this._allWorktimes.push(data);
-        //     // }
-        // }
         return this._allWorktimes;
     }
 
@@ -164,7 +162,6 @@ export class BackendService {
             if (a.reverseOrderDate > b.reverseOrderDate) return 1;
             return 0;
         })
-        // this.worktimes.next([...this._allWorktimes]);
     }
 
     loadWorktimeBudget(): Observable<any> {
