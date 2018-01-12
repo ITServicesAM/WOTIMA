@@ -9,15 +9,21 @@ import { WorktimeListComponent } from './worktime-list/worktime-list.component';
 import { NativeScriptUIListViewModule } from 'nativescript-pro-ui/listview/angular';
 import { WorktimePipesModule } from '../pipes/pipes.module';
 import { ToggleNavButtonModule } from "../directives/toggle-nav-button.module";
+import { ComponentsModule } from "../components/components.module";
+import { NativeScriptFormsModule } from "nativescript-angular";
+import { DropDownModule } from "nativescript-drop-down/angular";
 
 @NgModule({
     imports: [
         ToggleNavButtonModule,
         NativeScriptCommonModule,
+        NativeScriptFormsModule,
         TabsRoutingModule,
         TNSFontIconModule,
         NativeScriptUIListViewModule,
-        WorktimePipesModule
+        WorktimePipesModule,
+        ComponentsModule,
+        DropDownModule
     ],
     declarations: [
         TabsComponent,

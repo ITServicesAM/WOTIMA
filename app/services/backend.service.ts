@@ -97,7 +97,7 @@ export class BackendService {
                 this.ngZone.run(() => {
                     // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
                     let results = this.handleSnapshot(querySnapshot);
-                    observer.next(results);
+                    observer.next(results.length > 0 ? results : null);
                 });
             };
             firebase.query(onQueryEvent, path, {

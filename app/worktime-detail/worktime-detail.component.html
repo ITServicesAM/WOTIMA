@@ -1,22 +1,6 @@
-<!--<ActionBar class="action-bar">-->
-    <!--<GridLayout class="m-r-16" columns="auto,*" rows="*">-->
-        <!--<Ripple row="0" col="0" (tap)="onBackPressed()">-->
-            <!--<Label class="mdi p-8" [text]="'mdi-arrow-back' | fonticon"></Label>-->
-        <!--</Ripple>-->
-        <!--<Label-->
-                <!--#lblActionBar-->
-                <!--class="action-bar-title"-->
-                <!--text="WOTIMA"-->
-                <!--colSpan="2"-->
-                <!--row="0"-->
-                <!--col="0"-->
-                <!--style.textAlignment="center"></Label>-->
-    <!--</GridLayout>-->
-<!--</ActionBar>-->
-
 <ScrollView toggleNavButton class="page">
     <StackLayout>
-        <CardView elevation="40" radius="24" class="m-16">
+        <CardView elevation="24" radius="24" class="m-16">
             <StackLayout *ngIf="worktime" orientation="vertical">
                 <StackLayout class="p-16" orientation="vertical">
                     <Label class="h3 m-b-16 font-weight-bold"
