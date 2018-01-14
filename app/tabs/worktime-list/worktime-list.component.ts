@@ -10,6 +10,9 @@ import { Subscription } from "rxjs/Subscription";
 import * as moment from 'moment';
 import { Moment } from "moment";
 import { ValueList } from "nativescript-drop-down";
+import { Page } from "tns-core-modules/ui/page";
+import { ActionItem } from "tns-core-modules/ui/action-bar";
+import { Popup } from "nativescript-popup";
 
 @Component({
     selector: "worktime-list",
@@ -29,10 +32,18 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public selectedYear: number = null;
     public selectedMonth: number = null;
     public empty_list: boolean = false;
+    public popup: Popup
 
     constructor(private backend: BackendService,
                 private router: RouterExtensions,
+                private page: Page,
                 private zone: NgZone) {
+        let actionFilter = new ActionItem();
+        actionFilter.text = "Filtern";
+        actionFilter.icon = "res://ic_filter_list_white_24dp";
+        actionFilter.android.position= "actionBar";
+        actionFilter.ios.position= "right";
+        page.actionBar.actionItems.addItem(new ActionItem());
     }
 
     onEditWorktime(worktime: Worktime) {
