@@ -1,14 +1,18 @@
-<GridLayout rows="auto,auto, auto, *" columns="*,*" class="page height_100 p-16">
-    <DropDown class="dropdown" row="0" horizontalAlignment="center" col="0" [items]="years"
-              [selectedIndex]="selectedYear"
-              (selectedIndexChanged)="yearSelected($event)" hint="Jahr"></DropDown>
-    <DropDown class="dropdown" row="0" horizontalAlignment="center" col="1" [items]="months"
-              [selectedIndex]="selectedMonth"
-              (selectedIndexChanged)="monthSelected($event)" hint="Monat"></DropDown>
-    <Button row="1" col="0" class="btn btn-active btn-primary" text="Vorheriger Monat" (tap)="changeMonth(false)"></Button>
-    <Button row="1" col="1" class="btn btn-active btn-primary" text="Nächster Monat" (tap)="changeMonth(true)"></Button>
-    <Button row="2" colSpan="2" class="btn btn-active btn-primary" text="Filtern" (tap)="filter()"></Button>
-    <ListView row="3" col="0" colSpan="2" [items]="worktimes$ | async" separatorColor="Transparent">
+<ActionBar class="action-bar">
+    <ActionItem
+                #actionItemFilter
+                ios.position="right"
+                android.position="actionBar"
+                text="Filter"
+                (tap)="onFilter()"
+                icon="res://ic_filter_list_white_24dp">
+    </ActionItem>
+</ActionBar>
+
+<GridLayout toggleNavButton rows="auto, *" columns="*,*" class="page height_100 p-16">
+    <Button row="0" col="0" class="btn btn-active btn-primary" text="Vorheriger Monat" (tap)="changeMonth(false)"></Button>
+    <Button row="0" col="1" class="btn btn-active btn-primary" text="Nächster Monat" (tap)="changeMonth(true)"></Button>
+    <ListView row="1" col="0" colSpan="2" [items]="worktimes$ | async" separatorColor="Transparent">
         <ng-template let-item="item">
             <CardView elevation="24" radius="24" class="page m-16">
                 <!--<Ripple (tap)="onEditWorktime(item)">-->
@@ -26,13 +30,13 @@
             </CardView>
         </ng-template>
     </ListView>
-    <StackLayout *ngIf="empty_list" row="3" col="0" colSpan="2" horizontalAlignment="center"
+    <StackLayout *ngIf="empty_list" row="1" col="0" colSpan="2" horizontalAlignment="center"
                  verticalAlignment="center" class="m-32" width="288">
         <Image width="96" height="96" src="res://empty_worktimes_list" stretch="none"></Image>
         <Label textWrap="true" text="Für den ausgewählten Zeitraum liegen keine Daten vor"
                class="h4 text-center m-t-24"></Label>
     </StackLayout>
-    <ActivityIndicator row="0" rowSpan="4" col="0" colSpan="2" [busy]="isLoading" width="48" height="48"
+    <ActivityIndicator row="0" rowSpan="2" col="0" colSpan="2" [busy]="isLoading" width="48" height="48"
                        horizontalAlignment="center" verticalAlignment="center"
                        class="activity-indicator"></ActivityIndicator>
 </GridLayout>

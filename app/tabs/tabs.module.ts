@@ -12,6 +12,7 @@ import { ToggleNavButtonModule } from "../directives/toggle-nav-button.module";
 import { ComponentsModule } from "../components/components.module";
 import { NativeScriptFormsModule } from "nativescript-angular";
 import { DropDownModule } from "nativescript-drop-down/angular";
+import { FilterListComponent } from './worktime-list/filter-list/filter-list.component';
 
 @NgModule({
     imports: [
@@ -28,10 +29,14 @@ import { DropDownModule } from "nativescript-drop-down/angular";
     declarations: [
         TabsComponent,
         WorktimeHomeComponent,
-        WorktimeListComponent
+        WorktimeListComponent,
+        FilterListComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
+    ],
+    entryComponents: [
+        FilterListComponent
     ]
 })
 export class TabsModule {

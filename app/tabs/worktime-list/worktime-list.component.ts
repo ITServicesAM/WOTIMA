@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, NgZone, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { Worktime } from '../../models/worktime.interface';
-import { RouterExtensions } from 'nativescript-angular';
+import { DEVICE, ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { switchMap } from "rxjs/operators";
 import { WorktimeDateRange } from "../../models/worktime-date-range.interface";
 import { Subscription } from "rxjs/Subscription";
 import * as moment from 'moment';
-import { Moment } from "moment";
+import { Moment } from 'moment';
 import { ValueList } from "nativescript-drop-down";
 import { Page } from "tns-core-modules/ui/page";
-import { ActionItem } from "tns-core-modules/ui/action-bar";
 import { Popup } from "nativescript-popup";
+import { Device } from 'tns-core-modules/platform';
+import { FilterListComponent } from './filter-list/filter-list.component';
 
 @Component({
     selector: "worktime-list",
@@ -32,18 +33,15 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public selectedYear: number = null;
     public selectedMonth: number = null;
     public empty_list: boolean = false;
-    public popup: Popup
+    public popup: Popup;
 
-    constructor(private backend: BackendService,
+    constructor(@Inject(DEVICE) device: Device,
+                private backend: BackendService,
                 private router: RouterExtensions,
+                private vcRef: ViewContainerRef,
+                private modalService: ModalDialogService,
                 private page: Page,
                 private zone: NgZone) {
-        let actionFilter = new ActionItem();
-        actionFilter.text = "Filtern";
-        actionFilter.icon = "res://ic_filter_list_white_24dp";
-        actionFilter.android.position= "actionBar";
-        actionFilter.ios.position= "right";
-        page.actionBar.actionItems.addItem(new ActionItem());
     }
 
     onEditWorktime(worktime: Worktime) {
@@ -96,6 +94,15 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
         });
+    }
+
+    onFilter(){
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
+            fullscreen: false,
+        };
+
+        this.modalService.showModal(FilterListComponent, options)
     }
 
     ngOnDestroy(): void {

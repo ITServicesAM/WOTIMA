@@ -1,0 +1,9 @@
+<GridLayout rows="auto,auto" columns="*,*" class="page p-30">
+    <DropDown class="dropdown m-r-8" row="0" horizontalAlignment="center" col="0" [items]="years"
+              [selectedIndex]="selectedYear"
+              (selectedIndexChanged)="yearSelected($event)" hint="Jahr"></DropDown>
+    <DropDown class="dropdown" row="0" horizontalAlignment="center" col="1" [items]="months"
+              [selectedIndex]="selectedMonth"
+              (selectedIndexChanged)="monthSelected($event)" hint="Monat"></DropDown>
+    <Button row="1" colSpan="2" class="btn btn-active btn-primary" text="Filtern" (tap)="filter()"></Button>
+</GridLayout>
