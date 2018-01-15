@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, Inject, NgZone, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import {
+    AfterViewInit, ChangeDetectionStrategy, Component, Inject, NgZone, OnDestroy, OnInit,
+    ViewContainerRef
+} from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { Worktime } from '../../models/worktime.interface';
 import { DEVICE, ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
@@ -14,6 +17,8 @@ import { Page } from "tns-core-modules/ui/page";
 import { Popup } from "nativescript-popup";
 import { Device } from 'tns-core-modules/platform';
 import { FilterListComponent } from './filter-list/filter-list.component';
+import { ActionItem } from "tns-core-modules/ui/action-bar";
+import { UtilsService } from "../../services/utils.service";
 
 @Component({
     selector: "worktime-list",
@@ -23,8 +28,8 @@ import { FilterListComponent } from './filter-list/filter-list.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorktimeListComponent implements OnInit, OnDestroy {
-
     public worktimes$: Observable<any>;
+
     private worktimesSub: Subscription;
     private month$: BehaviorSubject<WorktimeDateRange>;
     public isLoading: boolean = true;
@@ -33,10 +38,10 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public selectedYear: number = null;
     public selectedMonth: number = null;
     public empty_list: boolean = false;
-    public popup: Popup;
+    public actionItemFilter: ActionItem;
 
-    constructor(@Inject(DEVICE) device: Device,
-                private backend: BackendService,
+    constructor(private backend: BackendService,
+                private utils: UtilsService,
                 private router: RouterExtensions,
                 private vcRef: ViewContainerRef,
                 private modalService: ModalDialogService,
@@ -49,6 +54,12 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.page.actionBar.actionItems.getItems().forEach(actionItem => {
+            if (actionItem.icon === "res://ic_filter_list_white_24dp")
+                this.actionItemFilter = actionItem;
+            // console.log(`ngOnInit ActionItemTitle: ${actionItemFilter.icon}`);
+        });
+
         moment.locale('de');
         let now: Moment = moment();
         // console.log(`WorktimeList: ${now.format('MMMM')}`);
@@ -71,12 +82,14 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             });
         }
 
-        setTimeout(() => {
-            this.zone.run(() => {
-                this.selectedYear = 0;
-                this.selectedMonth = 0;
-            });
-        }, 500);
+        this.selectedYear = 0;
+        this.selectedMonth = 0;
+
+        this.utils.subject.subscribe(data => {
+            if(data === 'tap'){
+                this.onFilter();
+            }
+        });
 
         let month = moment().month() + 1;
         let startAt = `${moment().year()}-${month < 10 ? '0' + month : month}-01`;
@@ -96,27 +109,22 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         });
     }
 
-    onFilter(){
+    onFilter() {
         const options: ModalDialogOptions = {
             viewContainerRef: this.vcRef,
             fullscreen: false,
+            context: {years: this.years, months: this.months}
         };
 
-        this.modalService.showModal(FilterListComponent, options)
+        this.modalService.showModal(FilterListComponent, options).then(result => {
+            this.selectedMonth = result.selectedMonth;
+            this.selectedYear = result.selectedYear;
+            this.filter();
+        });
     }
 
     ngOnDestroy(): void {
         this.worktimesSub.unsubscribe();
-    }
-
-    yearSelected(args) {
-        // console.log(`New year selected: ${args.newIndex}`);
-        this.selectedYear = args.newIndex;
-    }
-
-    monthSelected(args) {
-        // console.log(`New month selected: ${args.newIndex}`);
-        this.selectedMonth = args.newIndex;
     }
 
     changeMonth(nextMonth: boolean) {
@@ -149,8 +157,9 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         this.empty_list = false;
         this.isLoading = true;
         let month = this.months.getValue(this.selectedMonth);
-        let startAt = `${this.years.getValue(this.selectedYear)}-${month < 10 ? '0' + month : month}-01`;
-        let endAt = `${this.years.getValue(this.selectedYear)}-${month < 10 ? '0' + month : month}-31`;
+        let year = this.years.getValue(this.selectedYear);
+        let startAt = `${year}-${month < 10 ? '0' + month : month}-01`;
+        let endAt = `${year}-${month < 10 ? '0' + month : month}-31`;
         // console.log(`WorktimeList filter: startAt= ${startAt} | endAt= ${endAt}`);
         this.month$.next(new WorktimeDateRange(startAt, endAt));
     }

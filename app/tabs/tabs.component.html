@@ -1,3 +1,15 @@
+<ActionBarExtension
+        *ngIf="selectedTabIndex===1">
+    <ActionItem
+            #actionItemFilter
+            ios.position="right"
+            android.position="actionBar"
+            text="Filter"
+            (tap)="onFilter($event)"
+            icon="res://ic_filter_list_white_24dp">
+    </ActionItem>
+</ActionBarExtension>
+
 <!--
 The TabView component provides a simple way to navigate between different views by
 tapping on some of the tabs or by swiping between the views.
@@ -27,5 +39,5 @@ http://docs.nativescript.org/angular/code-samples/ui/tab-view
             <worktime-list></worktime-list>
         </StackLayout>
     </TabView>
-    <FAB row="1" (tap)="fabTap()" icon="res://ic_add_white_24dp" rippleColor="#292929" class="fab-button"></FAB>
+    <FAB row="1" icon="res://ic_add_white_24dp" rippleColor="#292929" class="fab-button" [nsRouterLink]="['/worktime-new']"></FAB>
 </GridLayout>

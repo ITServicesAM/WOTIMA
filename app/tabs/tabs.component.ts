@@ -6,6 +6,7 @@ import { BackendService } from '../services/backend.service';
 import { Observable } from "rxjs/Observable";
 import { User } from "nativescript-plugin-firebase";
 import { isIOS } from "platform";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
     selector: "TabsComponent",
@@ -20,18 +21,19 @@ export class TabsComponent implements OnInit {
     public user$: Observable<User>;
 
     constructor(private router: RouterExtensions,
-                private backendService: BackendService) {
+                private backendService: BackendService,
+                private utils: UtilsService) {
         /* ***********************************************************
-        * Use the constructor to inject app services that will be needed for
-        * the whole tab navigation layout as a whole.
-        *************************************************************/
+         * Use the constructor to inject app services that will be needed for
+         * the whole tab navigation layout as a whole.
+         *************************************************************/
     }
 
     ngOnInit(): void {
         /* ***********************************************************
-        * Use the "ngOnInit" handler to initialize data for the whole tab
-        * navigation layout as a whole.
-        *************************************************************/
+         * Use the "ngOnInit" handler to initialize data for the whole tab
+         * navigation layout as a whole.
+         *************************************************************/
         this.user$ = this.backendService.getUser();
     }
 
@@ -46,19 +48,19 @@ export class TabsComponent implements OnInit {
     }
 
     /* ***********************************************************
-    * The "getIconSource" function returns the correct tab icon source
-    * depending on whether the app is ran on Android or iOS.
-    * You can find all resources in /App_Resources/os
-    *************************************************************/
+     * The "getIconSource" function returns the correct tab icon source
+     * depending on whether the app is ran on Android or iOS.
+     * You can find all resources in /App_Resources/os
+     *************************************************************/
     getIconSource(icon: string): string {
         return isAndroid ? "" : "res://tabIcons/" + icon;
     }
 
     /* ***********************************************************
-    * Get the current tab view title and set it as an ActionBar title.
-    * Learn more about the onSelectedIndexChanged event here:
-    * https://docs.nativescript.org/cookbook/ui/tab-view#using-selectedindexchanged-event-from-xml
-    *************************************************************/
+     * Get the current tab view title and set it as an ActionBar title.
+     * Learn more about the onSelectedIndexChanged event here:
+     * https://docs.nativescript.org/cookbook/ui/tab-view#using-selectedindexchanged-event-from-xml
+     *************************************************************/
     onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         const tabView = <TabView>args.object;
         const selectedTabViewItem = tabView.items[args.newIndex];
@@ -76,5 +78,9 @@ export class TabsComponent implements OnInit {
 
     onAddWorktime() {
         this.router.navigate([`worktime-new`]);
+    }
+
+    onFilter(args) {
+        this.utils.subject.next('tap');
     }
 }

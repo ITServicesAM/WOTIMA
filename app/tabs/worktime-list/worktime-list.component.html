@@ -1,21 +1,9 @@
-<ActionBar class="action-bar">
-    <ActionItem
-                #actionItemFilter
-                ios.position="right"
-                android.position="actionBar"
-                text="Filter"
-                (tap)="onFilter()"
-                icon="res://ic_filter_list_white_24dp">
-    </ActionItem>
-</ActionBar>
-
 <GridLayout toggleNavButton rows="auto, *" columns="*,*" class="page height_100 p-16">
     <Button row="0" col="0" class="btn btn-active btn-primary" text="Vorheriger Monat" (tap)="changeMonth(false)"></Button>
     <Button row="0" col="1" class="btn btn-active btn-primary" text="Nächster Monat" (tap)="changeMonth(true)"></Button>
     <ListView row="1" col="0" colSpan="2" [items]="worktimes$ | async" separatorColor="Transparent">
         <ng-template let-item="item">
             <CardView elevation="24" radius="24" class="page m-16">
-                <!--<Ripple (tap)="onEditWorktime(item)">-->
                 <Ripple [nsRouterLink]="['/worktime-detail', item.date]"
                         pageTransition="slideLeft">
                     <GridLayout rows="auto,auto" columns="*,auto" class="page p-16">

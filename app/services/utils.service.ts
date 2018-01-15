@@ -1,9 +1,11 @@
 import { TNSFancyAlert } from 'nativescript-fancyalert';
 import { SnackBar, SnackBarOptions } from "nativescript-snackbar";
 import { LoadingIndicator, OptionsCommon } from "nativescript-loading-indicator";
+import { Subject } from "rxjs/Subject";
 
 export class UtilsService {
 
+    public subject: Subject<string> = new Subject<string>();
     private snackBar: SnackBar;
     private loading: LoadingIndicator;
     private loadingOptions: OptionsCommon = {

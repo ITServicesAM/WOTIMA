@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { ValueList } from 'nativescript-drop-down';
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import { ModalDialogParams } from "nativescript-angular";
 
 @Component({
     selector: "worktime-list-filter",
@@ -18,35 +17,16 @@ export class FilterListComponent implements OnInit {
     public selectedYear: number = null;
     public selectedMonth: number = null;
 
+    constructor(private zone: NgZone,
+                private params: ModalDialogParams) {}
+
     ngOnInit(): void {
-        moment.locale('de');
-        let now: Moment = moment();
-        // console.log(`WorktimeList: ${now.format('MMMM')}`);
-
-        for (let i = 0; i < 99; i++) {
-            let year = now.year() - i;
-            this.years.push({
-                value: year,
-                display: year + ""
-            });
-            // console.log(`WorktimeList: ${year}`);
-        }
-
-        for (let j = 0; j < 12; j++) {
-            now.set("month", j);
-            // console.log(now.format("MMMM"));
-            this.months.push({
-                value: (now.month() + 1),
-                display: now.format("MMMM"),
-            });
-        }
-
-        setTimeout(() => {
-            this.zone.run(() => {
-                this.selectedYear = 0;
-                this.selectedMonth = 0;
-            });
-        }, 500);
+        // console.log(`YearsArray: ${this.params.context.years}`);
+        // console.log(`MonthsArray: ${this.params.context.months}`);
+        this.years = this.params.context.years;
+        this.months = this.params.context.months;
+        this.selectedYear = 0;
+        this.selectedMonth = 0;
     }
 
     yearSelected(args) {
@@ -60,6 +40,10 @@ export class FilterListComponent implements OnInit {
     }
 
     filter() {
-
+        // let month = this.months.getValue(this.selectedMonth);
+        // let year = this.years.getValue(this.selectedYear);
+        // let startAt = `${year}-${month < 10 ? '0' + month : month}-01`;
+        // let endAt = `${year}-${month < 10 ? '0' + month : month}-31`;
+        this.params.closeCallback({selectedMonth: this.selectedMonth, selectedYear: this.selectedYear});
     }
 }
