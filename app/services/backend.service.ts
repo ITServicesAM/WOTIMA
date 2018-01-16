@@ -6,10 +6,9 @@ import { Moment } from 'moment';
 import { Worktime } from '../models/worktime.interface';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
+import { WorktimeDateRange } from "../models/worktime-date-range.interface";
 import firebase = require("nativescript-plugin-firebase");
 import moment = require("moment");
-import { forEach } from "@angular/router/src/utils/collection";
-import { WorktimeDateRange } from "../models/worktime-date-range.interface";
 
 const tokenKey = "token";
 
@@ -164,17 +163,17 @@ export class BackendService {
         })
     }
 
-    loadWorktimeBudget(): Observable<any> {
-        return new Observable((observer: any) => {
+    loadWorktimeBudget(): Observable<number> {
+        return Observable.create(subscriber => {
             let path = `overTimeBudgets/${BackendService.getToken()}`;
             let onValueEvent = (snapshot: any) => {
                 this.ngZone.run(() => {
                     console.log(`Neues Arbeitszeitkonto: ${JSON.stringify(snapshot)}`);
-                    let overTimeBudget;
+                    let overTimeBudget: number;
                     if (snapshot.value) {
-                        overTimeBudget = snapshot.value.overTimeBudget;
+                        overTimeBudget = <number>snapshot.value.overTimeBudget;
                     }
-                    observer.next(overTimeBudget);
+                    subscriber.next(overTimeBudget);
                 });
             };
             firebase.addValueEventListener(onValueEvent, `/${path}`).then(() => {
@@ -187,11 +186,36 @@ export class BackendService {
                 });
             });
         }).share();
+
+        // return Observable.create((subscriber: any) => {
+        //     let path = `overTimeBudgets/${BackendService.getToken()}`;
+        //     let onValueEvent = (snapshot: any) => {
+        //         this.ngZone.run(() => {
+        //             console.log(`Neues Arbeitszeitkonto: ${JSON.stringify(snapshot)}`);
+        //             let overTimeBudget: number;
+        //             if (snapshot.value) {
+        //                 overTimeBudget = <number>snapshot.value.overTimeBudget;
+        //             }
+        //             subscriber.next(overTimeBudget);
+        //         });
+        //     };
+        //     firebase.addValueEventListener(onValueEvent, `/${path}`).then(() => {
+        //         this.ngZone.run(() => {
+        //             // console.log('Listening to worktimeBudget');
+        //         })
+        //     }).catch(err => {
+        //         this.ngZone.run(() => {
+        //             this.utils.handleError(err);
+        //         });
+        //     });
+        // }).share<number>();
     }
 
     saveWorktimeBudget(worktimeBudget: number): Promise<any> {
-        let path = `overTimeBudgets/${BackendService.getToken()}/overTimeBudget`;
-        return firebase.setValue(path, worktimeBudget);
+        let path = `overTimeBudgets/${BackendService.getToken()}`;
+        return firebase.setValue(path, {
+            overTimeBudget: worktimeBudget
+        });
     }
 
     loadWorktime(dateKey: string): Observable<any> {

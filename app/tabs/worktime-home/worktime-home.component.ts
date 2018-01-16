@@ -3,13 +3,14 @@ import { BackendService } from '../../services/backend.service';
 import { ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { UtilsService } from '../../services/utils.service';
 import * as TimeDatePicker from 'nativescript-timedatepicker';
-    import { Page } from 'tns-core-modules/ui/page';
-    import * as moment from 'moment';
+import { Page } from 'tns-core-modules/ui/page';
+import * as moment from 'moment';
 import { Moment } from 'moment';
 import 'moment/locale/de';
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
 import { WorktimeBudgetEditComponent } from "../../worktime-budget-edit/worktime-budget-edit.component";
+import { Worktime } from "../../models/worktime.interface";
 
 @Component({
     selector: "worktime-home",
@@ -19,8 +20,8 @@ import { WorktimeBudgetEditComponent } from "../../worktime-budget-edit/worktime
 })
 export class WorktimeHomeComponent implements OnInit, OnDestroy {
 
-    public worktimeBudget$: Observable<any>;
-    public worktime$: Observable<any>;
+    public worktimeBudget$: Observable<number>;
+    public worktime$: Observable<Worktime>;
     private workTimeSubscription: Subscription;
 
     curDate: string;
@@ -53,19 +54,8 @@ export class WorktimeHomeComponent implements OnInit, OnDestroy {
         this.workTimeSubscription.unsubscribe();
     }
 
-    onEdit() {
-        // this.utils.showInfoDialog('OnEdit clicked!');
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.vcRef,
-            fullscreen: false,
-        };
-
-        this.modalService.showModal(WorktimeBudgetEditComponent, options).then(() => {
-        });
-    }
-
     loadWorktimeBudget() {
-        this.worktimeBudget$ = this.backendService.loadWorktimeBudget();
+        this.worktimeBudget$ = <Observable<number>>this.backendService.loadWorktimeBudget();
     }
 
     loadWorktime() {
@@ -102,6 +92,17 @@ export class WorktimeHomeComponent implements OnInit, OnDestroy {
                 this.worktimePauseString = undefined;
                 this.worktimeOvertimeString = undefined;
             }
+        });
+    }
+
+    onEdit() {
+        // this.utils.showInfoDialog('OnEdit clicked!');
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
+            fullscreen: false,
+        };
+
+        this.modalService.showModal(WorktimeBudgetEditComponent, options).then(() => {
         });
     }
 

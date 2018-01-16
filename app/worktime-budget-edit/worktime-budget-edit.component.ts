@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Config } from "../services/config";
 import { Page } from "tns-core-modules/ui/page";
 import { ModalDialogParams } from "nativescript-angular";
 import { Color } from "tns-core-modules/color";
@@ -22,7 +21,7 @@ const pageCommon = require("tns-core-modules/ui/page/page-common").PageBase;
 export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
 
     worktimeBudget: number;
-    subscriptionWorktimeBudget: Subscription;
+    worktimeBudgetSub: Subscription;
     editWorktimeBudgetForm: FormGroup;
 
     constructor(private params: ModalDialogParams,
@@ -40,7 +39,6 @@ export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
         this.page.backgroundColor = new Color(50, 0, 0, 0);
 
         if (page.ios) {
-
             // iOS by default won't let us have a transparent background on a modal
             // Ugly workaround from: https://github.com/NativeScript/nativescript/issues/2086#issuecomment-221956483
             // this.page.backgroundColor = new Color(50, 0, 0, 0);
@@ -77,13 +75,13 @@ export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.subscriptionWorktimeBudget = this.backend.loadWorktimeBudget().subscribe(data => {
+        this.worktimeBudgetSub = this.backend.loadWorktimeBudget().subscribe(data => {
             this.worktimeBudget = data;
         });
     }
 
     ngOnDestroy(): void {
-        this.subscriptionWorktimeBudget.unsubscribe();
+        this.worktimeBudgetSub.unsubscribe();
     }
 
     onSaveWorktimeBudget() {
