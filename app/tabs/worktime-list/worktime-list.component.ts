@@ -12,6 +12,7 @@ import { ValueList } from "nativescript-drop-down";
 import { FilterListComponent } from './filter-list/filter-list.component';
 import { UtilsService } from "../../services/utils.service";
 import * as dialogs from "ui/dialogs";
+import { Worktime } from "../../models/worktime.interface";
 
 @Component({
     selector: "worktime-list",
@@ -81,8 +82,9 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
                 return this.backend.loadWorktimes(worktimeDateRange);
             })
         );
-        this.worktimesSub = this.worktimes$.subscribe(value => {
-            this.isLoading = false;
+        this.worktimesSub = this.worktimes$.subscribe((value: Worktime[]) => {
+            if (value && value.length > 0 || value === null)
+                this.isLoading = false;
             this.empty_list = value === null;
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
@@ -90,27 +92,18 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     onDeleteClick(key: string) {
-        console.log('Delete item clicked');
+        const date: Moment = moment(key);
         dialogs.confirm({
-            message: "Arbeitszeit löschen?",
+            title: "Arbeitszeit löschen?",
+            message: `Hiermit werden alle Daten für den ${date.format('DD.MM.YYYY')} gelöscht!`,
             cancelButtonText: "Abbrechen",
             okButtonText: "Löschen"
         }).then(result => {
             console.log("Dialog result: " + result);
             if (result === true) {
-                this.backend.deleteWorktime(key).then(() => console.log(`Worktime with key: ${key} deleted`)).catch(err => console.log(err.message));
+                this.backend.deleteWorktime(key).catch(err => console.log(err.message));
             }
         });
-        // let options = {
-        //     title: "Arbeitszeit löschen?",
-        //     okButtonText: "Ja",
-        //     neutralButtonText: "Abbrechen",
-        //     cancelButtonText: "Nein"
-        // };
-        //
-        // action(options).then((result) => {
-        //     console.log(result);
-        // });
     }
 
     onFilter() {
@@ -132,8 +125,6 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     changeMonth(nextMonth: boolean) {
-        this.empty_list = false;
-        this.isLoading = true;
         let month = this.months.getValue(this.selectedMonth);
         let year = this.years.getValue(this.selectedYear);
         if (nextMonth) {

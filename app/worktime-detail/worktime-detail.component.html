@@ -1,3 +1,14 @@
+<ActionBarExtension>
+    <ActionItem
+            #actionItemFilter
+            ios.position="right"
+            android.position="actionBar"
+            text="Filter"
+            (tap)="onDelete($event)"
+            icon="res://ic_delete_white_24dp">
+    </ActionItem>
+</ActionBarExtension>
+
 <ScrollView toggleNavButton class="page">
     <StackLayout>
         <CardView elevation="24" radius="24" class="m-16">
@@ -17,7 +28,9 @@
                             style.margin-bottom="16"
                             [text]="worktime.workTimeEnd | worktime"></Button>
                     <TextInputLayout hint="Pause">
-                        <TextField [text]="worktime.workingMinutesPause"></TextField>
+                        <TextField  #pauseTextfield [ngModel]="worktime.workingMinutesPause"
+                                   (returnPress)="onPauseChange(pauseTextfield.text)"
+                                    keyboardType="number" returnKeyType="done"></TextField>
                     </TextInputLayout>
                     <Label class="h4" [text]="worktime.workingMinutesNetto | worktimeOvertime"></Label>
                 </StackLayout>

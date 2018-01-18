@@ -89,17 +89,18 @@ export class BackendService {
 
     loadWorktimes(worktimeDateRange: WorktimeDateRange): Observable<any> {
         this._allWorktimes = [];
-        return new Observable((observer: any) => {
-            observer.next(null);
+        return new Observable((subscriber: any) => {
+            subscriber.next(this._allWorktimes);
             let path = `/workTimes/${BackendService.getToken()}`;
             let onQueryEvent = (querySnapshot: firebase.FBData) => {
                 this.ngZone.run(() => {
                     // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
                     let results = this.handleSnapshot(querySnapshot);
-                    observer.next(results.length > 0 ? results : null);
+                    subscriber.next(results);
                 });
             };
-            firebase.query(onQueryEvent, path, {
+            firebase.query(null, path, {
+                singleEvent: true,
                 ranges: [
                     {
                         type: firebase.QueryRangeType.START_AT,
@@ -113,8 +114,35 @@ export class BackendService {
                 orderBy: {
                     type: firebase.QueryOrderByType.CHILD,
                     value: 'date'
+                },
+                limit: {
+                    type: firebase.QueryLimitType.FIRST,
+                    value: 1
                 }
-            })
+            }).then((result: FBData) => {
+                if (result.value) {
+                    // console.log(`SingleEventQuery: ${JSON.stringify(result.value)}`);
+                    firebase.query(onQueryEvent, path, {
+                        ranges: [
+                            {
+                                type: firebase.QueryRangeType.START_AT,
+                                value: worktimeDateRange.startAtDate
+                            },
+                            {
+                                type: firebase.QueryRangeType.END_AT,
+                                value: worktimeDateRange.endAtDate
+                            }
+                        ],
+                        orderBy: {
+                            type: firebase.QueryOrderByType.CHILD,
+                            value: 'date'
+                        }
+                    })
+                } else {
+                    subscriber.next(null);
+                }
+            });
+
         }).share();
     }
 
