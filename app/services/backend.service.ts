@@ -212,10 +212,8 @@ export class BackendService {
     }
 
     saveWorktimeBudget(worktimeBudget: number): Promise<any> {
-        let path = `overTimeBudgets/${BackendService.getToken()}`;
-        return firebase.setValue(path, {
-            overTimeBudget: worktimeBudget
-        });
+        let path = `overTimeBudgets/${BackendService.getToken()}/overTimeBudget`;
+        return firebase.setValue(path, worktimeBudget);
     }
 
     loadWorktime(dateKey: string): Observable<any> {
@@ -271,17 +269,17 @@ export class BackendService {
     calculateWorktimeBudget(dateKey: string) {
         firebase.getValue(`workTimes/${BackendService.getToken()}/${dateKey}`).then(result => {
             console.log(JSON.stringify(result));
-            let data = result.value;
-            if (data) {
-                let worktimeStart = data.workTimeStart;
-                let worktimeEnd = data.workTimeEnd;
-                let workingMinutesOverTimeOld = data.workingMinutesOverTime;
-                if (worktimeStart && worktimeEnd) {
-                    let milliseconds = moment(worktimeEnd).valueOf() - moment(worktimeStart).valueOf();
+            let worktime: Worktime = <Worktime>result.value;
+            if (worktime) {
+                // let worktimeStart = worktime.workTimeStart;
+                // let worktimeEnd = worktime.workTimeEnd;
+                // let workingMinutesOverTimeOld = worktime.workingMinutesOverTime;
+                if (worktime.workTimeStart && worktime.workTimeEnd) {
+                    let milliseconds: number = moment(worktime.workTimeEnd).valueOf() - moment(worktime.workTimeStart).valueOf();
 
                     if (milliseconds > 0) {
                         //get minutes form milliseconds
-                        let minutes = milliseconds / (1000 * 60);
+                        let minutes: number = milliseconds / (1000 * 60);
                         let workingMinutesBrutto: number = Math.floor(minutes);
                         // console.log("all minutes in the duration: " + workingMinutesRaw);
 
@@ -314,22 +312,29 @@ export class BackendService {
                         });
 
                         //CALCULATE ADDITION OR SUBTRACTION TO WORKING_HOURS_BUDGET
-                        firebase.getValue(`overTimeBudgets/${BackendService.getToken()}`).then(result => {
+                        firebase.getValue(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`).then(result => {
                             console.log(JSON.stringify(result));
-                            let data = result.value;
-                            if (data) {
-                                let worktimeBudget = data.overTimeBudget;
+                            let worktimeBudget: number;
+                            switch (typeof result.data) {
+                                case 'number':
+                                    worktimeBudget = result.data;
+                                    break;
+                                case 'string':
+                                    worktimeBudget = Number.parseInt(result.data);
+                                    break;
+                            }
+
+                            if (worktimeBudget) {
+                                // let worktimeBudget = data.overTimeBudget;
                                 let newWorktimeBudget: number = 0;
-                                if (!workingMinutesOverTimeOld) {
+                                if (!worktime.workingMinutesOverTime) {
                                     newWorktimeBudget = worktimeBudget + workingMinutesOverTimeNew;
                                 } else {
-                                    let valueChange: number = workingMinutesOverTimeNew - workingMinutesOverTimeOld;
+                                    let valueChange: number = workingMinutesOverTimeNew - worktime.workingMinutesOverTime;
                                     console.log("ValueChange: " + valueChange);
                                     newWorktimeBudget = worktimeBudget + valueChange;
                                 }
-                                firebase.update(`overTimeBudgets/${BackendService.getToken()}`, {
-                                    "overTimeBudget": newWorktimeBudget
-                                });
+                                firebase.update(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`, newWorktimeBudget);
                             }
                         });
                     }

@@ -89,4 +89,8 @@ export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
             this.params.closeCallback();
         }).catch(err => console.log(JSON.stringify(err)));
     }
+
+    getErrorMsg(){
+        
+    }
 }
