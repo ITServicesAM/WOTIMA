@@ -1,10 +1,6 @@
-import {
-    AfterViewInit, ChangeDetectionStrategy, Component, Inject, NgZone, OnDestroy, OnInit,
-    ViewContainerRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
-import { Worktime } from '../../models/worktime.interface';
-import { DEVICE, ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
+import { ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { switchMap } from "rxjs/operators";
@@ -13,12 +9,9 @@ import { Subscription } from "rxjs/Subscription";
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { ValueList } from "nativescript-drop-down";
-import { Page } from "tns-core-modules/ui/page";
-import { Popup } from "nativescript-popup";
-import { Device } from 'tns-core-modules/platform';
 import { FilterListComponent } from './filter-list/filter-list.component';
-import { ActionItem } from "tns-core-modules/ui/action-bar";
 import { UtilsService } from "../../services/utils.service";
+import * as dialogs from "ui/dialogs";
 
 @Component({
     selector: "worktime-list",
@@ -38,28 +31,15 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public selectedYear: number = null;
     public selectedMonth: number = null;
     public empty_list: boolean = false;
-    public actionItemFilter: ActionItem;
 
     constructor(private backend: BackendService,
                 private utils: UtilsService,
                 private router: RouterExtensions,
                 private vcRef: ViewContainerRef,
-                private modalService: ModalDialogService,
-                private page: Page,
-                private zone: NgZone) {
-    }
-
-    onEditWorktime(worktime: Worktime) {
-        this.router.navigate([`worktime-detail/${worktime.date}`]);
+                private modalService: ModalDialogService) {
     }
 
     ngOnInit() {
-        this.page.actionBar.actionItems.getItems().forEach(actionItem => {
-            if (actionItem.icon === "res://ic_filter_list_white_24dp")
-                this.actionItemFilter = actionItem;
-            // console.log(`ngOnInit ActionItemTitle: ${actionItemFilter.icon}`);
-        });
-
         moment.locale('de');
         let now: Moment = moment();
         // console.log(`WorktimeList: ${now.format('MMMM')}`);
@@ -107,6 +87,30 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
         });
+    }
+
+    onDeleteClick(key: string) {
+        console.log('Delete item clicked');
+        dialogs.confirm({
+            message: "Arbeitszeit löschen?",
+            cancelButtonText: "Abbrechen",
+            okButtonText: "Löschen"
+        }).then(result => {
+            console.log("Dialog result: " + result);
+            if (result === true) {
+                this.backend.deleteWorktime(key).then(() => console.log(`Worktime with key: ${key} deleted`)).catch(err => console.log(err.message));
+            }
+        });
+        // let options = {
+        //     title: "Arbeitszeit löschen?",
+        //     okButtonText: "Ja",
+        //     neutralButtonText: "Abbrechen",
+        //     cancelButtonText: "Nein"
+        // };
+        //
+        // action(options).then((result) => {
+        //     console.log(result);
+        // });
     }
 
     onFilter() {

@@ -1,5 +1,5 @@
 import { getString, setString } from "application-settings";
-import { LoginType, User } from 'nativescript-plugin-firebase';
+import { FBData, LoginType, User } from 'nativescript-plugin-firebase';
 import { Injectable, NgZone } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { Moment } from 'moment';
@@ -249,10 +249,24 @@ export class BackendService {
         return firebase.setValue(`workTimes/${BackendService.getToken()}/${worktime.date}`, worktime);
     }
 
+    deleteWorktime(key: string): Promise<any> {
+        return firebase.getValue(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`).then((overTimeBudget: FBData) => {
+            return firebase.getValue(`workTimes/${BackendService.getToken()}/${key}/workingMinutesOverTime`).then((workingMinutesOverTime: FBData) => {
+                console.log(`overtimeBudget: ${JSON.stringify(overTimeBudget)} | workingMinutesOverTime: ${JSON.stringify(workingMinutesOverTime)}`);
+                let updateObj = {};
+                updateObj[`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`] = overTimeBudget.value - workingMinutesOverTime.value;
+                updateObj[`workTimes/${BackendService.getToken()}/${key}`] = null;
+                console.dir(updateObj);
+                return firebase.update('/', updateObj);
+            });
+        });
+    }
+
     calculateWorktimeBudget(dateKey: string) {
-        firebase.getValue(`workTimes/${BackendService.getToken()}/${dateKey}`).then(result => {
+        firebase.getValue(`workTimes/${BackendService.getToken()}/${dateKey}`).then((result: FBData) => {
             console.log(JSON.stringify(result));
             let worktime: Worktime = <Worktime>result.value;
+            console.log(`calculateWorktimeBudget: ${JSON.stringify(worktime)} and the result was: ${result.value}`);
             if (worktime) {
                 // let worktimeStart = worktime.workTimeStart;
                 // let worktimeEnd = worktime.workTimeEnd;
@@ -295,15 +309,15 @@ export class BackendService {
                         });
 
                         //CALCULATE ADDITION OR SUBTRACTION TO WORKING_HOURS_BUDGET
-                        firebase.getValue(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`).then(result => {
+                        firebase.getValue(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`).then((result: FBData) => {
                             console.log(JSON.stringify(result));
                             let worktimeBudget: number;
-                            switch (typeof result.data) {
+                            switch (typeof result.value) {
                                 case 'number':
-                                    worktimeBudget = result.data;
+                                    worktimeBudget = result.value;
                                     break;
                                 case 'string':
-                                    worktimeBudget = Number.parseInt(result.data);
+                                    worktimeBudget = Number.parseInt(result.value);
                                     break;
                             }
 
