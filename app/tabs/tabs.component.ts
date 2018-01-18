@@ -34,7 +34,7 @@ export class TabsComponent implements OnInit {
          * Use the "ngOnInit" handler to initialize data for the whole tab
          * navigation layout as a whole.
          *************************************************************/
-        this.user$ = this.backendService.getUser();
+        this.user$ = BackendService.getUser();
     }
 
     get title(): string {
@@ -70,7 +70,7 @@ export class TabsComponent implements OnInit {
     }
 
     onSignOut() {
-        this.backendService.signOut().then(() => {
+        BackendService.signOut().then(() => {
             this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
         });
     }

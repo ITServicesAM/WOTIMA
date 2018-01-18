@@ -38,10 +38,10 @@ export class SignInEmailComponent implements OnInit {
     onSignInWithEmail() {
         this.utils.showLoading();
         console.log(JSON.stringify(this.signInEmailForm.value));
-        this.backend.signInWithEmail(this.signInEmailForm.value.email, this.signInEmailForm.value.password).then((user) => {
+        BackendService.signInWithEmail(this.signInEmailForm.value.email, this.signInEmailForm.value.password).then((user) => {
                 this.utils.hideLoading();
                 if (user.emailVerified) {
-                    this.backend.createUser(user);
+                    BackendService.createUser(user);
                     this.router.navigate(["/tabs"], {
                         clearHistory: true,
                         transition: {
@@ -51,7 +51,7 @@ export class SignInEmailComponent implements OnInit {
                     });
                 }
                 else {
-                    this.backend.signOut();
+                    BackendService.signOut();
                     // this.utils.showInfoDialog("Du musst deine Email Adresse zunächst bestätigen!");
                     this.utils.showSnackBarWithAction("Du musst deine Email Adresse zunächst bestätigen!", "ok", (args) => {
                         if (args.command === "Action") {

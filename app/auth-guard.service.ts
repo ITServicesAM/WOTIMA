@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
 
     canActivate(): Promise<boolean> {
         return new Promise(resolve => {
-            this.backend.getCurrentUser().then(user => {
+            BackendService.getCurrentUser().then(user => {
                 console.log(`There is a user and email is ${user.emailVerified ? "verified" : " not verified"}`);
                 if (!user.emailVerified) {
                     this.router.navigate(["/worktime-sign-in"]);

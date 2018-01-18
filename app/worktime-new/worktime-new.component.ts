@@ -120,7 +120,7 @@ export class WorktimeNewComponent implements OnInit {
     }
 
     onSaveChanges() {
-        this.backendService.saveWorktime(new Worktime(
+        BackendService.saveWorktime(new Worktime(
             this.worktimeDate,
             this.worktimeStart,
             this.worktimeEnd,

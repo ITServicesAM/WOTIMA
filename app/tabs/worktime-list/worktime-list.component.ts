@@ -86,7 +86,7 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         this.selectedMonth = 0;
 
         this.utils.subject.subscribe(data => {
-            if(data === 'tap'){
+            if (data === 'tap') {
                 this.onFilter();
             }
         });
@@ -162,5 +162,13 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         let endAt = `${year}-${month < 10 ? '0' + month : month}-31`;
         // console.log(`WorktimeList filter: startAt= ${startAt} | endAt= ${endAt}`);
         this.month$.next(new WorktimeDateRange(startAt, endAt));
+    }
+
+    getCurrentDate(): string {
+        let month = this.months.getValue(this.selectedMonth);
+        let year = this.years.getValue(this.selectedYear);
+        let date = moment();
+        date.month(month - 1);
+        return `${date.format('MMMM')} ${year}`;
     }
 }

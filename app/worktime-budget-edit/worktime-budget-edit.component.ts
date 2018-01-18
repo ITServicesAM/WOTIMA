@@ -7,6 +7,7 @@ import * as utils from 'utils/utils';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BackendService } from "../services/backend.service";
 import { Subscription } from "rxjs/Subscription";
+import { TextField } from "tns-core-modules/ui/text-field";
 
 const pageCommon = require("tns-core-modules/ui/page/page-common").PageBase;
 
@@ -77,6 +78,23 @@ export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.worktimeBudgetSub = this.backend.loadWorktimeBudget().subscribe(data => {
             this.worktimeBudget = data;
+
+            let txtWorktimeBudget: TextField = this.page.getViewById<TextField>('txtWorktimeBudget');
+            if (txtWorktimeBudget.ios) {
+                txtWorktimeBudget.focus();
+            }
+            if (txtWorktimeBudget.android) {
+                setTimeout(() => {
+                    // console.log(`txtWorktimeBudget Length: ${txtWorktimeBudget.android.length()}`);
+                    txtWorktimeBudget.android.requestFocus();
+                    txtWorktimeBudget.android.setSelection(
+                        txtWorktimeBudget.android.length()
+                    );
+
+                    let imm = utils.ad.getInputMethodManager();
+                    imm.showSoftInput(txtWorktimeBudget.android, 0);
+                }, 100);
+            }
         });
     }
 
@@ -85,12 +103,12 @@ export class WorktimeBudgetEditComponent implements OnInit, OnDestroy {
     }
 
     onSaveWorktimeBudget() {
-        this.backend.saveWorktimeBudget(this.worktimeBudget).then(() => {
+        BackendService.saveWorktimeBudget(this.worktimeBudget).then(() => {
             this.params.closeCallback();
         }).catch(err => console.log(JSON.stringify(err)));
     }
 
-    getErrorMsg(){
-        
+    getErrorMsg() {
+
     }
 }

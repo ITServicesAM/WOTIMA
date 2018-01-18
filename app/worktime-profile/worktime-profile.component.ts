@@ -20,7 +20,7 @@ export class WorktimeProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.user$ = this.backendService.getUser();
+        this.user$ = BackendService.getUser();
     }
 
     onBackPressed() {

@@ -29,7 +29,7 @@ export class BackendService {
     constructor(private utils: UtilsService, private ngZone: NgZone) {
     }
 
-    getCurrentUser(): Promise<User> {
+    static getCurrentUser(): Promise<User> {
         return firebase.getCurrentUser();
     }
 
@@ -37,7 +37,7 @@ export class BackendService {
         return firebase.login({
             type: LoginType.GOOGLE
         }).then((user) => {
-            return this.createUser(user);
+            return BackendService.createUser(user);
         }).catch(err => this.utils.handleError(err));
     }
 
@@ -49,11 +49,11 @@ export class BackendService {
                 scope: ['public_profile', 'email']
             }
         }).then((user) => {
-            return this.createUser(user);
+            return BackendService.createUser(user);
         }).catch(err => this.utils.handleError(err));
     }
 
-    signInWithEmail(email: string, password: string) {
+    static signInWithEmail(email: string, password: string) {
         return firebase.login({
             type: LoginType.PASSWORD,
             passwordOptions: {
@@ -72,16 +72,16 @@ export class BackendService {
         }).catch(err => this.utils.handleError(err));
     }
 
-    signOut(): Promise<any> {
+    static signOut(): Promise<any> {
         BackendService.setToken("");
         return firebase.logout();
     }
 
-    getUser(): Observable<User> {
+    static getUser(): Observable<User> {
         return Observable.fromPromise(firebase.getCurrentUser());
     }
 
-    createUser(user: User): Promise<void> {
+    static createUser(user: User): Promise<void> {
         return firebase.update(`users/${BackendService.getToken()}`, {
             "email": user.email
         })
@@ -115,15 +115,6 @@ export class BackendService {
                     value: 'date'
                 }
             })
-            // .then(() => {
-            //     this.ngZone.run(() => {
-            //         console.log('query added');
-            //     })
-            // }).catch(err => {
-            //     this.ngZone.run(() => {
-            //         this.utils.handleError(err);
-            //     });
-            // });
         }).share();
     }
 
@@ -145,9 +136,21 @@ export class BackendService {
             });
         }
         if (data.type === "ChildChanged") {
+            let newWorktime: Worktime = data.value;
             this._allWorktimes.forEach(worktime => {
                 if (worktime.date === data.key) {
-                    this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1, worktime);
+                    let oldWorktime = this._allWorktimes.slice(this._allWorktimes.indexOf(worktime), 1)[0];
+                    oldWorktime.date = newWorktime.date;
+                    oldWorktime.reverseOrderDate = newWorktime.reverseOrderDate;
+                    oldWorktime.workingMinutesBrutto = newWorktime.workingMinutesBrutto;
+                    oldWorktime.workingMinutesNetto = newWorktime.workingMinutesNetto;
+                    oldWorktime.workingMinutesOverTime = newWorktime.workingMinutesOverTime;
+                    oldWorktime.workingMinutesPause = newWorktime.workingMinutesPause;
+                    oldWorktime.workTimeEnd = newWorktime.workTimeEnd;
+                    oldWorktime.workTimeStart = newWorktime.workTimeStart;
+                    // this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1);
+
+                    console.log(`Changed worktime: ${this._allWorktimes.slice(this._allWorktimes.indexOf(worktime), 1)[0]}`);
                 }
             });
         }
@@ -186,34 +189,14 @@ export class BackendService {
                 });
             });
         }).share();
-
-        // return Observable.create((subscriber: any) => {
-        //     let path = `overTimeBudgets/${BackendService.getToken()}`;
-        //     let onValueEvent = (snapshot: any) => {
-        //         this.ngZone.run(() => {
-        //             console.log(`Neues Arbeitszeitkonto: ${JSON.stringify(snapshot)}`);
-        //             let overTimeBudget: number;
-        //             if (snapshot.value) {
-        //                 overTimeBudget = <number>snapshot.value.overTimeBudget;
-        //             }
-        //             subscriber.next(overTimeBudget);
-        //         });
-        //     };
-        //     firebase.addValueEventListener(onValueEvent, `/${path}`).then(() => {
-        //         this.ngZone.run(() => {
-        //             // console.log('Listening to worktimeBudget');
-        //         })
-        //     }).catch(err => {
-        //         this.ngZone.run(() => {
-        //             this.utils.handleError(err);
-        //         });
-        //     });
-        // }).share<number>();
     }
 
-    saveWorktimeBudget(worktimeBudget: number): Promise<any> {
-        let path = `overTimeBudgets/${BackendService.getToken()}/overTimeBudget`;
-        return firebase.setValue(path, worktimeBudget);
+    static saveWorktimeBudget(worktimeBudget): Promise<any> {
+        let worktimeBudgetNumber = parseFloat(worktimeBudget);
+        let path = `overTimeBudgets/${BackendService.getToken()}`;
+        return firebase.setValue(path, {
+            "overTimeBudget": isNaN(worktimeBudgetNumber) ? worktimeBudget : worktimeBudgetNumber
+        });
     }
 
     loadWorktime(dateKey: string): Observable<any> {
@@ -262,7 +245,7 @@ export class BackendService {
         }).then(() => this.calculateWorktimeBudget(dateKey)).catch(err => this.utils.handleError(JSON.stringify(err)));
     }
 
-    saveWorktime(worktime: Worktime): Promise<any> {
+    static saveWorktime(worktime: Worktime): Promise<any> {
         return firebase.setValue(`workTimes/${BackendService.getToken()}/${worktime.date}`, worktime);
     }
 
