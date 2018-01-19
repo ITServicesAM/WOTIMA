@@ -4,9 +4,9 @@
     <Button row="0" col="1" class="btn btn-active btn-primary" text="Nächster Monat" (tap)="changeMonth(true)"></Button>
     <Label row="1" col="0" colSpan="2" class="h4 text-center m-t-4" text="{{getCurrentDate()}}"></Label>
     <StackLayout row="2" col="0" colSpan="2" class="hr-light m-t-4"></StackLayout>
-    <RadListView [items]="worktimes$ | async" row="3" col="0" colSpan="2">
-        <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Scale"
-                              itemDeleteAnimation="Scale"></ListViewLinearLayout>
+    <RadListView [items]="worktimes$ | async" row="3" col="0" colSpan="2"  [class.visible]="listLoaded">
+        <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Slide"
+                              itemDeleteAnimation="Slide"></ListViewLinearLayout>
         <ng-template tkListItemTemplate let-item="item">
             <CardView elevation="24" radius="24" class="page m-16">
                 <Ripple [nsRouterLink]="['/worktime-detail', item.date]" (longPress)="onDeleteClick(item.date)"
@@ -25,8 +25,8 @@
             </CardView>
         </ng-template>
     </RadListView>
-    <StackLayout *ngIf="empty_list" row="3" col="0" colSpan="2" horizontalAlignment="center"
-                 verticalAlignment="center" class="m-32"width="288">
+    <StackLayout *ngIf="isEmptyList" row="3" col="0" colSpan="2" horizontalAlignment="center"
+                 verticalAlignment="center" class="empty_view m-32" width="288" [class.visible]="isEmptyList">
         <Image width="72" height="72" src="res://empty_worktimes_list" stretch="aspectFit"></Image>
         <Label textWrap="true" text="Für den ausgewählten Zeitraum liegen keine Daten vor"
                class="h4 text-center m-t-24"></Label>

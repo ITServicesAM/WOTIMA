@@ -31,7 +31,8 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public months: ValueList<number> = new ValueList<number>();
     public selectedYear: number = null;
     public selectedMonth: number = null;
-    public empty_list: boolean = false;
+    public isEmptyList: boolean = false;
+    public listLoaded: boolean = false;
 
     constructor(private backend: BackendService,
                 private utils: UtilsService,
@@ -83,9 +84,13 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             })
         );
         this.worktimesSub = this.worktimes$.subscribe((value: Worktime[]) => {
-            if (value && value.length > 0 || value === null)
+            if (value && value.length > 0 || value === null) {
                 this.isLoading = false;
-            this.empty_list = value === null;
+            }
+            if (value === null)
+                this.isEmptyList = true;
+            if (value && value.length > 0)
+                this.listLoaded = true;
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
         });
@@ -149,8 +154,9 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     filter() {
-        this.empty_list = false;
+        this.isEmptyList = false;
         this.isLoading = true;
+        this.listLoaded = false;
         let month = this.months.getValue(this.selectedMonth);
         let year = this.years.getValue(this.selectedYear);
         let startAt = `${year}-${month < 10 ? '0' + month : month}-01`;
