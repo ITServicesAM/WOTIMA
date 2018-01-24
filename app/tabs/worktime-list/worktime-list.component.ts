@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { Observable } from 'rxjs/Observable';
@@ -13,17 +13,30 @@ import { FilterListComponent } from './filter-list/filter-list.component';
 import { UtilsService } from "../../services/utils.service";
 import * as dialogs from "ui/dialogs";
 import { Worktime } from "../../models/worktime.interface";
+import { animate, style, transition, trigger } from "@angular/animations";
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 
 @Component({
     selector: "worktime-list",
     moduleId: module.id,
     templateUrl: "./worktime-list.component.html",
     styleUrls: ['worktime-list.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    animations: [
+        trigger("visibility", [
+            transition("* => fadeIn", [
+                style({opacity: 0}),
+                animate(1000, style({opacity: 1}))
+            ]),
+            transition("* => fadeOut", [
+                animate(1000, style({opacity: 0}))
+            ])
+        ])
+
+    ]
 })
 export class WorktimeListComponent implements OnInit, OnDestroy {
-    public worktimes$: Observable<any>;
 
+    public worktimes$: Observable<any>;
     private worktimesSub: Subscription;
     private month$: BehaviorSubject<WorktimeDateRange>;
     public isLoading: boolean = true;
@@ -34,11 +47,21 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     public isEmptyList: boolean = false;
     public listLoaded: boolean = false;
 
+    public listState: string = "";
+
     constructor(private backend: BackendService,
                 private utils: UtilsService,
                 private router: RouterExtensions,
                 private vcRef: ViewContainerRef,
                 private modalService: ModalDialogService) {
+    }
+
+    listFadeIn() {
+        this.listState = "fadeIn";
+    }
+
+    listFadeOut() {
+        this.listState = "fadeOut";
     }
 
     ngOnInit() {
@@ -89,8 +112,11 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             }
             if (value === null)
                 this.isEmptyList = true;
-            if (value && value.length > 0)
+            if (value && value.length > 0) {
                 this.listLoaded = true;
+                this.listFadeIn();
+                console.log(`WorktimeList loaded! listState: ${this.listState}`);
+            }
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
         });
@@ -154,6 +180,7 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     filter() {
+        this.listFadeOut();
         this.isEmptyList = false;
         this.isLoading = true;
         this.listLoaded = false;

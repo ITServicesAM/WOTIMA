@@ -9,6 +9,7 @@ import 'rxjs/add/operator/share';
 import { WorktimeDateRange } from "../models/worktime-date-range.interface";
 import firebase = require("nativescript-plugin-firebase");
 import moment = require("moment");
+import { FirebaseDataService } from "./firebase/firebase-data.service";
 
 const tokenKey = "token";
 
@@ -26,7 +27,9 @@ export class BackendService {
     // worktimes: BehaviorSubject<Array<Worktime>> = new BehaviorSubject([]);
     private _allWorktimes: Worktime[] = [];
 
-    constructor(private utils: UtilsService, private ngZone: NgZone) {
+    constructor(private utils: UtilsService,
+                private firebaseService: FirebaseDataService,
+                private ngZone: NgZone) {
     }
 
     static getCurrentUser(): Promise<User> {
@@ -87,63 +90,80 @@ export class BackendService {
         })
     }
 
-    loadWorktimes(worktimeDateRange: WorktimeDateRange): Observable<any> {
-        this._allWorktimes = [];
-        return new Observable((subscriber: any) => {
-            subscriber.next(this._allWorktimes);
-            let path = `/workTimes/${BackendService.getToken()}`;
-            let onQueryEvent = (querySnapshot: firebase.FBData) => {
-                this.ngZone.run(() => {
-                    // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
-                    let results = this.handleSnapshot(querySnapshot);
-                    subscriber.next(results);
-                });
-            };
-            firebase.query(null, path, {
-                singleEvent: true,
-                ranges: [
-                    {
-                        type: firebase.QueryRangeType.START_AT,
-                        value: worktimeDateRange.startAtDate
-                    },
-                    {
-                        type: firebase.QueryRangeType.END_AT,
-                        value: worktimeDateRange.endAtDate
-                    }
-                ],
-                orderBy: {
-                    type: firebase.QueryOrderByType.CHILD,
-                    value: 'date'
+    loadWorktimes(worktimeDateRange: WorktimeDateRange): Observable<Worktime[]> {
+        let queryOptions = {
+            ranges: [
+                {
+                    type: firebase.QueryRangeType.START_AT,
+                    value: worktimeDateRange.startAtDate
                 },
-                limit: {
-                    type: firebase.QueryLimitType.FIRST,
-                    value: 1
+                {
+                    type: firebase.QueryRangeType.END_AT,
+                    value: worktimeDateRange.endAtDate
                 }
-            }).then((result: FBData) => {
-                if (result.value) {
-                    // console.log(`SingleEventQuery: ${JSON.stringify(result.value)}`);
-                    firebase.query(onQueryEvent, path, {
-                        ranges: [
-                            {
-                                type: firebase.QueryRangeType.START_AT,
-                                value: worktimeDateRange.startAtDate
-                            },
-                            {
-                                type: firebase.QueryRangeType.END_AT,
-                                value: worktimeDateRange.endAtDate
-                            }
-                        ],
-                        orderBy: {
-                            type: firebase.QueryOrderByType.CHILD,
-                            value: 'date'
-                        }
-                    })
-                } else {
-                    subscriber.next(null);
-                }
-            });
-
-        }).share();
+            ],
+            orderBy: {
+                type: firebase.QueryOrderByType.CHILD,
+                value: 'date'
+            }
+        };
+        return this.firebaseService.query<Worktime>(`/workTimes/${BackendService.getToken()}`,queryOptions).valueChanges();
+        // this._allWorktimes = [];
+        // return new Observable((subscriber: any) => {
+        //     subscriber.next(this._allWorktimes);
+        //     let path = `/workTimes/${BackendService.getToken()}`;
+        //     let onQueryEvent = (querySnapshot: firebase.FBData) => {
+        //         this.ngZone.run(() => {
+        //             // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
+        //             let results = this.handleSnapshot(querySnapshot);
+        //             subscriber.next(results);
+        //         });
+        //     };
+        //     firebase.query(null, path, {
+        //         singleEvent: true,
+        //         ranges: [
+        //             {
+        //                 type: firebase.QueryRangeType.START_AT,
+        //                 value: worktimeDateRange.startAtDate
+        //             },
+        //             {
+        //                 type: firebase.QueryRangeType.END_AT,
+        //                 value: worktimeDateRange.endAtDate
+        //             }
+        //         ],
+        //         orderBy: {
+        //             type: firebase.QueryOrderByType.CHILD,
+        //             value: 'date'
+        //         },
+        //         limit: {
+        //             type: firebase.QueryLimitType.FIRST,
+        //             value: 1
+        //         }
+        //     }).then((result: FBData) => {
+        //         if (result.value) {
+        //             // console.log(`SingleEventQuery: ${JSON.stringify(result.value)}`);
+        //             firebase.query(onQueryEvent, path, {
+        //                 ranges: [
+        //                     {
+        //                         type: firebase.QueryRangeType.START_AT,
+        //                         value: worktimeDateRange.startAtDate
+        //                     },
+        //                     {
+        //                         type: firebase.QueryRangeType.END_AT,
+        //                         value: worktimeDateRange.endAtDate
+        //                     }
+        //                 ],
+        //                 orderBy: {
+        //                     type: firebase.QueryOrderByType.CHILD,
+        //                     value: 'date'
+        //                 }
+        //             })
+        //         } else {
+        //             subscriber.next(null);
+        //         }
+        //     });
+        //
+        // }).share();
     }
 
     handleSnapshot(data: firebase.FBData): Worktime[] {

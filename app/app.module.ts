@@ -22,6 +22,8 @@ import { Config } from "./services/config";
 import { device } from "tns-core-modules/platform";
 import { registerElement } from "nativescript-angular/element-registry";
 import { DropDownModule } from "nativescript-drop-down/angular";
+import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
+import { FirebaseDataService } from "./services/firebase/firebase-data.service";
 
 registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 registerElement("CardView", () => require("nativescript-cardview").CardView);
@@ -52,6 +54,7 @@ Config.isTablet = device.deviceType === DeviceType.Tablet;
     ],
     imports: [
         NativeScriptModule,
+        NativeScriptAnimationsModule,
         AppRoutingModule,
         SignInModule,
         SignInEmailModule,
@@ -70,7 +73,8 @@ Config.isTablet = device.deviceType === DeviceType.Tablet;
     providers: [
         AuthGuard,
         BackendService,
-        UtilsService
+        UtilsService,
+        FirebaseDataService
     ],
     schemas: [
         NO_ERRORS_SCHEMA
