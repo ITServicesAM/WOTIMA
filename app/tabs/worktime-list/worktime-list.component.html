@@ -6,27 +6,28 @@
     <Label row="1" col="0" colSpan="2" class="h4 text-center m-t-4" text="{{getCurrentDate()}}"></Label>
     <StackLayout row="2" col="0" colSpan="2" class="hr-light m-t-4"></StackLayout>
     <!--<RadListView [items]="worktimes$ | async" row="3" col="0" colSpan="2" [@visibility]="listState">-->
-    <!--<ng-template tkListItemTemplate let-item="item">-->
-    <!--<CardView elevation="24" radius="24" class="page m-16">-->
-    <!--<Ripple [nsRouterLink]="['/worktime-detail', item.date]" (longPress)="onDeleteClick(item.date)"-->
-    <!--pageTransition="slideLeft">-->
-    <!--<GridLayout rows="auto,auto,auto" columns="*,auto" class="page p-x-16 p-y-8">-->
-    <!--<Label row="0" col="0" class="h3 m-b-16 font-weight-bold"-->
-    <!--[text]="item.workTimeStart | worktimeDate"></Label>-->
-    <!--<Label row="1" col="0" class="h4"-->
-    <!--[text]="item.workingMinutesNetto | worktimeOvertime"></Label>-->
-    <!--<Label *ngIf="item.workingMinutesOverTime" row="2" col="0" class="h5"-->
-    <!--text="Überstunden: {{item.workingMinutesOverTime}} Minuten"></Label>-->
-    <!--<Label row="0" rowSpan="3" verticalAlignment="center" col="1" class="mdi p-8"-->
-    <!--[text]="'mdi-keyboard-arrow-right' | fonticon"></Label>-->
-    <!--</GridLayout>-->
-    <!--</Ripple>-->
-    <!--</CardView>-->
-    <!--</ng-template>-->
+        <!--<ng-template tkListItemTemplate let-item="item">-->
+            <!--<CardView elevation="24" radius="24" class="page m-16">-->
+                <!--<Ripple [nsRouterLink]="['/worktime-detail', item.date]" (longPress)="onDeleteClick(item.date)"-->
+                        <!--pageTransition="slideLeft">-->
+                    <!--<GridLayout rows="auto,auto,auto" columns="*,auto" class="page p-x-16 p-y-8">-->
+                        <!--<Label row="0" col="0" class="h3 m-b-16 font-weight-bold"-->
+                               <!--[text]="item.workTimeStart | worktimeDate"></Label>-->
+                        <!--<Label row="1" col="0" class="h4"-->
+                               <!--[text]="item.workingMinutesNetto | worktimeOvertime"></Label>-->
+                        <!--<Label *ngIf="item.workingMinutesOverTime" row="2" col="0" class="h5"-->
+                               <!--text="Überstunden: {{item.workingMinutesOverTime}} Minuten"></Label>-->
+                        <!--<Label row="0" rowSpan="3" verticalAlignment="center" col="1" class="mdi p-8"-->
+                               <!--[text]="'mdi-keyboard-arrow-right' | fonticon"></Label>-->
+                    <!--</GridLayout>-->
+                <!--</Ripple>-->
+            <!--</CardView>-->
+        <!--</ng-template>-->
     <!--</RadListView>-->
     <ScrollView row="3" col="0" colSpan="2">
         <StackLayout>
-            <CardView [@visibility]="listState" *ngFor="let item of worktimes$ | async" elevation="24" radius="24" class="page m-16">
+            <CardView [@visibility]="listState" *ngFor="let item of worktimes$ | async" elevation="24" radius="24"
+                      class="page m-16">
                 <Ripple [nsRouterLink]="['/worktime-detail', item.date]" (longPress)="onDeleteClick(item.date)"
                         pageTransition="slideLeft">
                     <GridLayout rows="auto,auto,auto" columns="*,auto" class="page p-x-16 p-y-8">

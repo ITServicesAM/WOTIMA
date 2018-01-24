@@ -25,10 +25,10 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
         trigger("visibility", [
             transition("* => fadeIn", [
                 style({opacity: 0}),
-                animate(1000, style({opacity: 1}))
+                animate(600, style({opacity: 1}))
             ]),
             transition("* => fadeOut", [
-                animate(1000, style({opacity: 0}))
+                animate(600, style({opacity: 0}))
             ])
         ])
 
