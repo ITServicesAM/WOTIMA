@@ -13,7 +13,7 @@ import { FilterListComponent } from './filter-list/filter-list.component';
 import { UtilsService } from "../../services/utils.service";
 import * as dialogs from "ui/dialogs";
 import { Worktime } from "../../models/worktime.interface";
-import { animate, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 
 @Component({
@@ -30,8 +30,16 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
             transition("* => fadeOut", [
                 animate(600, style({opacity: 0}))
             ])
+        ]),
+        trigger('listAnimation', [
+            transition("* => fadeIn", [
+                style({ opacity: 0 }),
+                animate(5000, style({ opacity: 1 }))
+            ]),
+            transition("* => fadeOut", [
+                animate(600, style({ opacity: 0 }))
+            ])
         ])
-
     ]
 })
 export class WorktimeListComponent implements OnInit, OnDestroy {

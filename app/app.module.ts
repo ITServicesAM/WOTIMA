@@ -14,22 +14,20 @@ import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
 import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
 import { SignUpModule } from "./auth/sign-up/sign-up.module";
-import firebase = require("nativescript-plugin-firebase/app");
 import { SignInEmailModule } from "./auth/sign-in-email/sign-in-email.module";
 import { WorktimeBudgetEditModule } from "./worktime-budget-edit/worktime-budget-edit.module";
 import { DeviceType } from "tns-core-modules/ui/enums";
 import { Config } from "./services/config";
 import { device } from "tns-core-modules/platform";
 import { registerElement } from "nativescript-angular/element-registry";
-import { DropDownModule } from "nativescript-drop-down/angular";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { FirebaseDataService } from "./services/firebase/firebase-data.service";
+import firebase = require("nativescript-plugin-firebase/app");
 
 registerElement("Ripple", () => require("nativescript-ripple").Ripple);
 registerElement("CardView", () => require("nativescript-cardview").CardView);
 registerElement("Fab", () => require("nativescript-floatingactionbutton").Fab);
 registerElement('TextInputLayout', () => (<any>textinputlayout).TextInputLayout);
-// registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 firebase.initializeApp({
     persist: true,

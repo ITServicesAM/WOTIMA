@@ -25,8 +25,8 @@
         <!--</ng-template>-->
     <!--</RadListView>-->
     <ScrollView row="3" col="0" colSpan="2">
-        <StackLayout>
-            <CardView [@visibility]="listState" *ngFor="let item of worktimes$ | async" elevation="24" radius="24"
+        <StackLayout [@listAnimation]="listState">
+            <CardView *ngFor="let item of worktimes$ | async" elevation="24" radius="24"
                       class="page m-16">
                 <Ripple [nsRouterLink]="['/worktime-detail', item.date]" (longPress)="onDeleteClick(item.date)"
                         pageTransition="slideLeft">
