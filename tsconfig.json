@@ -22,7 +22,6 @@
     "exclude": [
         "node_modules",
         "platforms",
-        "**/*.aot.ts",
         "functions",
         "assets_working_dir"
     ]
