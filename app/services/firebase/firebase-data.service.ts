@@ -33,8 +33,7 @@ export class FirebaseDataService implements FirebaseDataServiceCommon {
                 this.ngZone.run(() => {
                     subscriber.next(data.value);
                 });
-            }, path)
-            .then(result => eventListeners = result.listeners);
+            }, path).then(result => eventListeners = result.listeners);
 
             return () => removeEventListeners(eventListeners, path);
         });
@@ -54,8 +53,7 @@ export class FirebaseDataService implements FirebaseDataServiceCommon {
                 this.ngZone.run(() => {
                     subscriber.next(data);
                 });
-            }, path)
-            .then(listenerWrapper => eventListeners = listenerWrapper.listeners);
+            }, path).then(listenerWrapper => eventListeners = listenerWrapper.listeners);
 
             return () => removeEventListeners(eventListeners, path);
         });
@@ -71,12 +69,27 @@ export class FirebaseDataService implements FirebaseDataServiceCommon {
         return new Observable<FBData>(subscriber => {
             let eventListeners: any[];
 
+            query(null, path, {
+                ranges: options.ranges,
+                orderBy: options.orderBy,
+                singleEvent: true
+            }).then(listenerWrapper => {
+                this.ngZone.run(() => {
+                    ////console.log(`InnerQuery singleEvent called ${JSON.stringify(listenerWrapper)}`);
+                    if(listenerWrapper.value === null){
+                        subscriber.next(null);
+                    }
+                })
+            });
+
             query(data => {
                 this.ngZone.run(() => {
+                    //console.log(`Inner QueryData: ${data.key}`);
                     subscriber.next(data);
                 });
-            },path,options)
-            .then(listenerWrapper => eventListeners = listenerWrapper.listeners);
+            }, path, options).then(listenerWrapper => {
+                eventListeners = listenerWrapper.listeners;
+            });
 
             return () => removeEventListeners(eventListeners, path);
         });

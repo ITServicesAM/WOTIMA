@@ -108,110 +108,6 @@ export class BackendService {
             }
         };
         return this.firebaseService.query<Worktime>(`/workTimes/${BackendService.getToken()}`,queryOptions).valueChanges();
-        // this._allWorktimes = [];
-        // return new Observable((subscriber: any) => {
-        //     subscriber.next(this._allWorktimes);
-        //     let path = `/workTimes/${BackendService.getToken()}`;
-        //     let onQueryEvent = (querySnapshot: firebase.FBData) => {
-        //         this.ngZone.run(() => {
-        //             // console.log(`BackendService: ${JSON.stringify(querySnapshot)}`);
-        //             let results = this.handleSnapshot(querySnapshot);
-        //             subscriber.next(results);
-        //         });
-        //     };
-        //     firebase.query(null, path, {
-        //         singleEvent: true,
-        //         ranges: [
-        //             {
-        //                 type: firebase.QueryRangeType.START_AT,
-        //                 value: worktimeDateRange.startAtDate
-        //             },
-        //             {
-        //                 type: firebase.QueryRangeType.END_AT,
-        //                 value: worktimeDateRange.endAtDate
-        //             }
-        //         ],
-        //         orderBy: {
-        //             type: firebase.QueryOrderByType.CHILD,
-        //             value: 'date'
-        //         },
-        //         limit: {
-        //             type: firebase.QueryLimitType.FIRST,
-        //             value: 1
-        //         }
-        //     }).then((result: FBData) => {
-        //         if (result.value) {
-        //             // console.log(`SingleEventQuery: ${JSON.stringify(result.value)}`);
-        //             firebase.query(onQueryEvent, path, {
-        //                 ranges: [
-        //                     {
-        //                         type: firebase.QueryRangeType.START_AT,
-        //                         value: worktimeDateRange.startAtDate
-        //                     },
-        //                     {
-        //                         type: firebase.QueryRangeType.END_AT,
-        //                         value: worktimeDateRange.endAtDate
-        //                     }
-        //                 ],
-        //                 orderBy: {
-        //                     type: firebase.QueryOrderByType.CHILD,
-        //                     value: 'date'
-        //                 }
-        //             })
-        //         } else {
-        //             subscriber.next(null);
-        //         }
-        //     });
-        //
-        // }).share();
-    }
-
-    handleSnapshot(data: firebase.FBData): Worktime[] {
-        if (data.type === "ChildAdded") {
-            let alreadyAdded = false;
-            this._allWorktimes.forEach(worktime => {
-                if (worktime.date === data.key)
-                    alreadyAdded = true;
-            });
-            if (!alreadyAdded)
-                this._allWorktimes.push(data.value);
-        }
-        if (data.type === "ChildRemoved") {
-            this._allWorktimes.forEach(worktime => {
-                if (worktime.date === data.key) {
-                    this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1);
-                }
-            });
-        }
-        if (data.type === "ChildChanged") {
-            let newWorktime: Worktime = data.value;
-            this._allWorktimes.forEach(worktime => {
-                if (worktime.date === data.key) {
-                    let oldWorktime = this._allWorktimes.slice(this._allWorktimes.indexOf(worktime), 1)[0];
-                    oldWorktime.date = newWorktime.date;
-                    oldWorktime.reverseOrderDate = newWorktime.reverseOrderDate;
-                    oldWorktime.workingMinutesBrutto = newWorktime.workingMinutesBrutto;
-                    oldWorktime.workingMinutesNetto = newWorktime.workingMinutesNetto;
-                    oldWorktime.workingMinutesOverTime = newWorktime.workingMinutesOverTime;
-                    oldWorktime.workingMinutesPause = newWorktime.workingMinutesPause;
-                    oldWorktime.workTimeEnd = newWorktime.workTimeEnd;
-                    oldWorktime.workTimeStart = newWorktime.workTimeStart;
-                    // this._allWorktimes.splice(this._allWorktimes.indexOf(worktime), 1);
-
-                    console.log(`Changed worktime: ${this._allWorktimes.slice(this._allWorktimes.indexOf(worktime), 1)[0]}`);
-                }
-            });
-        }
-        this.publishUpdates();
-        return this._allWorktimes;
-    }
-
-    private publishUpdates() {
-        this._allWorktimes.sort(function (a, b) {
-            if (a.reverseOrderDate < b.reverseOrderDate) return -1;
-            if (a.reverseOrderDate > b.reverseOrderDate) return 1;
-            return 0;
-        })
     }
 
     loadWorktimeBudget(): Observable<number> {
@@ -219,7 +115,7 @@ export class BackendService {
             let path = `overTimeBudgets/${BackendService.getToken()}`;
             let onValueEvent = (snapshot: any) => {
                 this.ngZone.run(() => {
-                    console.log(`Neues Arbeitszeitkonto: ${JSON.stringify(snapshot)}`);
+                    //console.log(`Neues Arbeitszeitkonto: ${JSON.stringify(snapshot)}`);
                     let overTimeBudget: number;
                     if (snapshot.value) {
                         overTimeBudget = <number>snapshot.value.overTimeBudget;
@@ -252,10 +148,10 @@ export class BackendService {
             let path = `workTimes/${BackendService.getToken()}/${dateKey}`;
             let onValueEvent = (snapshot: any) => {
                 this.ngZone.run(() => {
-                    console.log(JSON.stringify(snapshot));
+                    //console.log(JSON.stringify(snapshot));
                     let worktime;
                     if (snapshot.value) {
-                        console.log(JSON.stringify(snapshot.value));
+                        //console.log(JSON.stringify(snapshot.value));
                         worktime = snapshot.value;
                     }
                     observer.next(worktime);
@@ -263,7 +159,7 @@ export class BackendService {
             };
             firebase.addValueEventListener(onValueEvent, `/${path}`).then(() => {
                 this.ngZone.run(() => {
-                    console.log('Listening to specific worktime');
+                    //console.log('Listening to specific worktime');
                 })
             }).catch(err => {
                 this.ngZone.run(() => {
@@ -300,11 +196,11 @@ export class BackendService {
     deleteWorktime(key: string): Promise<any> {
         return firebase.getValue(`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`).then((overTimeBudget: FBData) => {
             return firebase.getValue(`workTimes/${BackendService.getToken()}/${key}/workingMinutesOverTime`).then((workingMinutesOverTime: FBData) => {
-                console.log(`overtimeBudget: ${JSON.stringify(overTimeBudget)} | workingMinutesOverTime: ${JSON.stringify(workingMinutesOverTime)}`);
+                //console.log(`overtimeBudget: ${JSON.stringify(overTimeBudget)} | workingMinutesOverTime: ${JSON.stringify(workingMinutesOverTime)}`);
                 let updateObj = {};
                 updateObj[`overTimeBudgets/${BackendService.getToken()}/overTimeBudget`] = overTimeBudget.value - workingMinutesOverTime.value;
                 updateObj[`workTimes/${BackendService.getToken()}/${key}`] = null;
-                console.dir(updateObj);
+                //console.dir(updateObj);
                 return firebase.update('/', updateObj);
             });
         });
@@ -312,9 +208,9 @@ export class BackendService {
 
     calculateWorktimeBudget(dateKey: string) {
         firebase.getValue(`workTimes/${BackendService.getToken()}/${dateKey}`).then((result: FBData) => {
-            console.log(JSON.stringify(result));
+            //console.log(JSON.stringify(result));
             let worktime: Worktime = <Worktime>result.value;
-            console.log(`calculateWorktimeBudget: ${JSON.stringify(worktime)} and the result was: ${result.value}`);
+            //console.log(`calculateWorktimeBudget: ${JSON.stringify(worktime)} and the result was: ${result.value}`);
             if (worktime) {
                 // let worktimeStart = worktime.workTimeStart;
                 // let worktimeEnd = worktime.workTimeEnd;

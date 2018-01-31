@@ -17,20 +17,25 @@ export class FirebaseList<T> {
             this.items = new Map<string, T>();
 
             const subscription = this.observable.subscribe(item => {
-                switch (item.type) {
-                    case 'ChildAdded':
-                    case 'ChildChanged':
-                        item.value.$key = item.key;
-                        this.items.set(item.key, item.value);
-                        break;
-                    case 'ChildRemoved':
-                        this.items.delete(item.key);
-                        break;
-                }
+                ////console.log(`FirebaseListData: ${item}`);
+                if (item) {
+                    switch (item.type) {
+                        case 'ChildAdded':
+                        case 'ChildChanged':
+                            item.value.$key = item.key;
+                            this.items.set(item.key, item.value);
+                            break;
+                        case 'ChildRemoved':
+                            this.items.delete(item.key);
+                            break;
+                    }
 
-                const newValues: T[] = Array.from(this.items.values());
-                FirebaseList.sortValues(newValues);
-                subscriber.next(newValues);
+                    const newValues: T[] = Array.from(this.items.values());
+                    FirebaseList.sortValues(newValues);
+                    subscriber.next(newValues);
+                } else {
+                    subscriber.next(null);
+                }
             });
 
             return () => {
@@ -40,7 +45,7 @@ export class FirebaseList<T> {
         })).share();
     }
 
-    private static sortValues(values: any[]){
+    private static sortValues(values: any[]) {
         values.sort(function (a, b) {
             if (a.reverseOrderDate < b.reverseOrderDate) return -1;
             if (a.reverseOrderDate > b.reverseOrderDate) return 1;

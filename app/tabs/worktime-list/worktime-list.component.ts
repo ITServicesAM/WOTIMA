@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    ViewContainerRef
+} from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { ModalDialogOptions, ModalDialogService, RouterExtensions } from 'nativescript-angular';
 import { Observable } from 'rxjs/Observable';
@@ -13,31 +21,44 @@ import { FilterListComponent } from './filter-list/filter-list.component';
 import { UtilsService } from "../../services/utils.service";
 import * as dialogs from "ui/dialogs";
 import { Worktime } from "../../models/worktime.interface";
-import { animate, state, style, transition, trigger } from "@angular/animations";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
+import { animate, query, stagger, style, transition, trigger } from "@angular/animations";
 
 @Component({
     selector: "worktime-list",
     moduleId: module.id,
     templateUrl: "./worktime-list.component.html",
     styleUrls: ['worktime-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger("visibility", [
-            transition("* => fadeIn", [
+        trigger('itemAnimation', [
+            transition(":enter", [
                 style({opacity: 0}),
-                animate(600, style({opacity: 1}))
+                animate(500, style({opacity: 1}))
             ]),
-            transition("* => fadeOut", [
-                animate(600, style({opacity: 0}))
+            transition(":leave", [
+                style({opacity: 1}),
+                animate(500, style({opacity: 0}))
             ])
         ]),
-        trigger('listAnimation', [
-            transition("* => fadeIn", [
-                style({ opacity: 0 }),
-                animate(5000, style({ opacity: 1 }))
-            ]),
-            transition("* => fadeOut", [
-                animate(600, style({ opacity: 0 }))
+        trigger("listAnimation", [
+            transition("* => *", [
+                // this hides everything right away
+                query(":enter",
+                    style({opacity: 0}),
+                    {optional: true}),
+                // starts to animate things with a stagger in between
+                // query(":enter", stagger('300ms', [
+                //     animate("800s ease-in", keyframes([
+                //         style({opacity: 0, transform: 'translateY(-75px)', offset: 0}),
+                //         style({opacity: 0.5, transform: 'translateY(35px)', offset: 0.3}),
+                //         style({opacity: 1, transform: 'translateY(0)', offset: 1})
+                //     ]))
+                // ]), {optional: true}),
+
+                // starts to animate things with a stagger in between
+                query(":enter", stagger(5000, [
+                    animate(1000, style({opacity: 1}))
+                ]), {delay: 200, optional: true})
             ])
         ])
     ]
@@ -45,31 +66,23 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 export class WorktimeListComponent implements OnInit, OnDestroy {
 
     public worktimes$: Observable<any>;
+    public worktimes: Worktime[];
     private worktimesSub: Subscription;
     private month$: BehaviorSubject<WorktimeDateRange>;
-    public isLoading: boolean = true;
+    public isLoading: boolean = false;
+    public isShowLoadingIndicator: boolean = false;
     public years: ValueList<number> = new ValueList<number>();
     public months: ValueList<number> = new ValueList<number>();
     public selectedYear: number = null;
     public selectedMonth: number = null;
-    public isEmptyList: boolean = false;
-    public listLoaded: boolean = false;
-
-    public listState: string = "";
 
     constructor(private backend: BackendService,
                 private utils: UtilsService,
                 private router: RouterExtensions,
                 private vcRef: ViewContainerRef,
+                private changeRef: ChangeDetectorRef,
+                private zone: NgZone,
                 private modalService: ModalDialogService) {
-    }
-
-    listFadeIn() {
-        this.listState = "fadeIn";
-    }
-
-    listFadeOut() {
-        this.listState = "fadeOut";
     }
 
     ngOnInit() {
@@ -95,9 +108,11 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             });
         }
 
+
         this.selectedYear = 0;
         this.selectedMonth = 0;
 
+        //responding to the actionItem tapEvent
         this.utils.subject.subscribe(data => {
             if (data === 'tap') {
                 this.onFilter();
@@ -115,16 +130,15 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             })
         );
         this.worktimesSub = this.worktimes$.subscribe((value: Worktime[]) => {
-            if (value && value.length > 0 || value === null) {
-                this.isLoading = false;
-            }
-            if (value === null)
-                this.isEmptyList = true;
-            if (value && value.length > 0) {
-                this.listLoaded = true;
-                this.listFadeIn();
-                console.log(`WorktimeList loaded! listState: ${this.listState}`);
-            }
+            this.zone.run(() => {
+                if (value && value.length > 0 || value === null) {
+                    this.isLoading = false;
+                    this.utils.hideLoading();
+                }
+                console.log(`isLoading: ${this.isLoading}`);
+                this.worktimes = value === null ? [] : value;
+                this.changeRef.detectChanges();
+            });
             // console.log(`WorktimeList: ${JSON.stringify(value)}`);
             // console.log("query has fired the function");
         });
@@ -188,10 +202,14 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
     }
 
     filter() {
-        this.listFadeOut();
-        this.isEmptyList = false;
+        this.worktimes = [];
         this.isLoading = true;
-        this.listLoaded = false;
+        this.isShowLoadingIndicator = false;
+        this.changeRef.detectChanges();
+        setTimeout(() => {
+            this.isShowLoadingIndicator = true;
+            this.showLoadingIndicator();
+        }, 500);
         let month = this.months.getValue(this.selectedMonth);
         let year = this.years.getValue(this.selectedYear);
         let startAt = `${year}-${month < 10 ? '0' + month : month}-01`;
@@ -206,5 +224,12 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         let date = moment();
         date.month(month - 1);
         return `${date.format('MMMM')} ${year}`;
+    }
+
+    showLoadingIndicator() {
+        if (this.isShowLoadingIndicator === true && this.isLoading === true) {
+            console.log(`${this.isShowLoadingIndicator === true && this.isLoading === true ? "should show loadingIndicator" : "should hide loadingIndicator"}`);
+            this.zone.run(() => this.utils.showLoading());
+        }
     }
 }
