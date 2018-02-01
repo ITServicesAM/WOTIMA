@@ -1,6 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { ValueList } from 'nativescript-drop-down';
 import { ModalDialogParams } from "nativescript-angular";
+import * as moment from "moment";
 
 @Component({
     selector: "worktime-list-filter",
@@ -26,7 +27,7 @@ export class FilterListComponent implements OnInit {
         this.years = this.params.context.years;
         this.months = this.params.context.months;
         this.selectedYear = 0;
-        this.selectedMonth = 0;
+        this.selectedMonth = moment().month();
     }
 
     yearSelected(args) {

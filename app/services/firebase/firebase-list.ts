@@ -31,7 +31,7 @@ export class FirebaseList<T> {
                     }
 
                     const newValues: T[] = Array.from(this.items.values());
-                    FirebaseList.sortValues(newValues);
+                    // FirebaseList.sortValues(newValues);
                     subscriber.next(newValues);
                 } else {
                     subscriber.next(null);

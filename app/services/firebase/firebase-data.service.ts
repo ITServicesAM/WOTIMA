@@ -75,7 +75,7 @@ export class FirebaseDataService implements FirebaseDataServiceCommon {
                 singleEvent: true
             }).then(listenerWrapper => {
                 this.ngZone.run(() => {
-                    ////console.log(`InnerQuery singleEvent called ${JSON.stringify(listenerWrapper)}`);
+                    //console.log(`InnerQuery singleEvent called ${JSON.stringify(listenerWrapper)}`);
                     if(listenerWrapper.value === null){
                         subscriber.next(null);
                     }

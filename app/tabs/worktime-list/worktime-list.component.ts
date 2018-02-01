@@ -21,7 +21,7 @@ import { FilterListComponent } from './filter-list/filter-list.component';
 import { UtilsService } from "../../services/utils.service";
 import * as dialogs from "ui/dialogs";
 import { Worktime } from "../../models/worktime.interface";
-import { animate, query, stagger, style, transition, trigger } from "@angular/animations";
+import { animate, keyframes, query, stagger, style, transition, trigger } from "@angular/animations";
 
 @Component({
     selector: "worktime-list",
@@ -47,18 +47,18 @@ import { animate, query, stagger, style, transition, trigger } from "@angular/an
                     style({opacity: 0}),
                     {optional: true}),
                 // starts to animate things with a stagger in between
-                // query(":enter", stagger('300ms', [
-                //     animate("800s ease-in", keyframes([
-                //         style({opacity: 0, transform: 'translateY(-75px)', offset: 0}),
-                //         style({opacity: 0.5, transform: 'translateY(35px)', offset: 0.3}),
-                //         style({opacity: 1, transform: 'translateY(0)', offset: 1})
-                //     ]))
-                // ]), {optional: true}),
+                query(":enter", stagger('300ms', [
+                    animate("800ms ease-in", keyframes([
+                        style({opacity: 0, transform: 'translateY(-75px)', offset: 0}),
+                        style({opacity: 0.5, transform: 'translateY(35px)', offset: 0.3}),
+                        style({opacity: 1, transform: 'translateY(0)', offset: 1})
+                    ]))
+                ]), {optional: true}),
 
                 // starts to animate things with a stagger in between
-                query(":enter", stagger(5000, [
-                    animate(1000, style({opacity: 1}))
-                ]), {delay: 200, optional: true})
+                // query(":enter", stagger('500ms', [
+                //     animate(1000, style({opacity: 1}))
+                // ]), {delay: '300ms', optional: true})
             ])
         ])
     ]
@@ -66,7 +66,7 @@ import { animate, query, stagger, style, transition, trigger } from "@angular/an
 export class WorktimeListComponent implements OnInit, OnDestroy {
 
     public worktimes$: Observable<any>;
-    public worktimes: Worktime[];
+    public worktimes: Worktime[] = [];
     private worktimesSub: Subscription;
     private month$: BehaviorSubject<WorktimeDateRange>;
     public isLoading: boolean = false;
@@ -81,14 +81,14 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
                 private router: RouterExtensions,
                 private vcRef: ViewContainerRef,
                 private changeRef: ChangeDetectorRef,
-                private zone: NgZone,
+                private ngZone: NgZone,
                 private modalService: ModalDialogService) {
     }
 
     ngOnInit() {
         moment.locale('de');
         let now: Moment = moment();
-        // console.log(`WorktimeList: ${now.format('MMMM')}`);
+        console.log(`WorktimeList: ${now.format('MMMM')}`);
 
         for (let i = 0; i < 99; i++) {
             let year = now.year() - i;
@@ -103,14 +103,13 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             now.set("month", j);
             // console.log(now.format("MMMM"));
             this.months.push({
-                value: (now.month() + 1),
+                value: (now.month()),
                 display: now.format("MMMM"),
             });
         }
 
-
         this.selectedYear = 0;
-        this.selectedMonth = 0;
+        this.selectedMonth = moment().month();
 
         //responding to the actionItem tapEvent
         this.utils.subject.subscribe(data => {
@@ -119,18 +118,18 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
             }
         });
 
-        let month = moment().month() + 1;
-        let startAt = `${moment().year()}-${month < 10 ? '0' + month : month}-01`;
-        let endAt = `${moment().year()}-${month < 10 ? '0' + month : month}-31`;
-        // console.log(`WorktimeList ngOnInit: startAt= ${startAt} | endAt= ${endAt}`);
-        this.month$ = new BehaviorSubject<WorktimeDateRange>(new WorktimeDateRange(startAt, endAt));
+        const now2 = moment();
+        const startAtReversed: number = (0 - now2.startOf('month').valueOf());
+        const endAtReversed: number = (0 - now2.endOf('month').valueOf());
+        console.log(`WorktimeList ngOnInit: startAtReversed= ${now2.startOf('month').format()} | endAtReversed= ${now2.endOf('month').format()}`);
+        this.month$ = new BehaviorSubject<WorktimeDateRange>(new WorktimeDateRange(startAtReversed, endAtReversed));
         this.worktimes$ = this.month$.pipe(
             switchMap((worktimeDateRange: WorktimeDateRange) => {
                 return this.backend.loadWorktimes(worktimeDateRange);
             })
         );
         this.worktimesSub = this.worktimes$.subscribe((value: Worktime[]) => {
-            this.zone.run(() => {
+            this.ngZone.run(() => {
                 if (value && value.length > 0 || value === null) {
                     this.isLoading = false;
                     this.utils.hideLoading();
@@ -181,15 +180,15 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         let month = this.months.getValue(this.selectedMonth);
         let year = this.years.getValue(this.selectedYear);
         if (nextMonth) {
-            if (month === 12) {
-                month = 1;
+            if (month === 11) {
+                month = 0;
                 year = year + 1;
             } else {
                 month = month + 1;
             }
         } else {
-            if (month === 1) {
-                month = 12;
+            if (month === 0) {
+                month = 11;
                 year = year - 1;
             } else {
                 month = month - 1;
@@ -207,29 +206,31 @@ export class WorktimeListComponent implements OnInit, OnDestroy {
         this.isShowLoadingIndicator = false;
         this.changeRef.detectChanges();
         setTimeout(() => {
-            this.isShowLoadingIndicator = true;
-            this.showLoadingIndicator();
-        }, 500);
-        let month = this.months.getValue(this.selectedMonth);
-        let year = this.years.getValue(this.selectedYear);
-        let startAt = `${year}-${month < 10 ? '0' + month : month}-01`;
-        let endAt = `${year}-${month < 10 ? '0' + month : month}-31`;
+            this.ngZone.run(() => {
+                this.isShowLoadingIndicator = true;
+                this.showLoadingIndicator();
+            });
+        }, 300);
+        const month = this.months.getValue(this.selectedMonth);
+        const year = this.years.getValue(this.selectedYear);
+        const date = moment().year(year).month(month);
+        const startAtReversed: number = (0 - date.startOf('month').valueOf());
+        const endAtReversed: number = (0 - date.endOf('month').valueOf());
         // console.log(`WorktimeList filter: startAt= ${startAt} | endAt= ${endAt}`);
-        this.month$.next(new WorktimeDateRange(startAt, endAt));
+        this.month$.next(new WorktimeDateRange(startAtReversed, endAtReversed));
     }
 
     getCurrentDate(): string {
-        let month = this.months.getValue(this.selectedMonth);
-        let year = this.years.getValue(this.selectedYear);
-        let date = moment();
-        date.month(month - 1);
+        const month = this.months.getValue(this.selectedMonth);
+        const year = this.years.getValue(this.selectedYear);
+        const date = moment().month(month);
         return `${date.format('MMMM')} ${year}`;
     }
 
     showLoadingIndicator() {
         if (this.isShowLoadingIndicator === true && this.isLoading === true) {
             console.log(`${this.isShowLoadingIndicator === true && this.isLoading === true ? "should show loadingIndicator" : "should hide loadingIndicator"}`);
-            this.zone.run(() => this.utils.showLoading());
+            this.ngZone.run(() => this.utils.showLoading());
         }
     }
 }

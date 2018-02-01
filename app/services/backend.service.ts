@@ -95,16 +95,16 @@ export class BackendService {
             ranges: [
                 {
                     type: firebase.QueryRangeType.START_AT,
-                    value: worktimeDateRange.startAtDate
+                    value: worktimeDateRange.endAtDateReversed
                 },
                 {
                     type: firebase.QueryRangeType.END_AT,
-                    value: worktimeDateRange.endAtDate
+                    value: worktimeDateRange.startAtDateReversed
                 }
             ],
             orderBy: {
                 type: firebase.QueryOrderByType.CHILD,
-                value: 'date'
+                value: 'reverseOrderDate'
             }
         };
         return this.firebaseService.query<Worktime>(`/workTimes/${BackendService.getToken()}`,queryOptions).valueChanges();
@@ -170,8 +170,8 @@ export class BackendService {
     }
 
     saveStartWorktime(date: Moment) {
-        let dateKey = date.format("YYYY-MM-DD");
-        let workTimeStart = date.format();
+        const dateKey = date.format("YYYY-MM-DD");
+        const workTimeStart = date.format();
         firebase.update(`workTimes/${BackendService.getToken()}/${dateKey}`, {
             "workTimeStart": workTimeStart,
             "date": dateKey,

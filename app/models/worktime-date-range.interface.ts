@@ -1,9 +1,9 @@
 export class WorktimeDateRange {
-    startAtDate: string;
-    endAtDate: string;
+    startAtDateReversed: number;
+    endAtDateReversed: number;
 
-    constructor(startAtDate: string, endAtDate: string) {
-        this.startAtDate = startAtDate;
-        this.endAtDate = endAtDate;
+    constructor(startAtDateReversed: number, endAtDateReversed: number) {
+        this.startAtDateReversed = startAtDateReversed;
+        this.endAtDateReversed = endAtDateReversed;
     }
 }
