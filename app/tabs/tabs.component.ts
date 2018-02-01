@@ -17,7 +17,7 @@ import { UtilsService } from "../services/utils.service";
 export class TabsComponent implements OnInit {
     isIOS: boolean = isIOS;
     private _title: string;
-    public selectedTabIndex: number = 0;
+    public selectedTabIndex: number = 1;
     public user$: Observable<User>;
 
     constructor(private router: RouterExtensions,
@@ -73,11 +73,6 @@ export class TabsComponent implements OnInit {
         BackendService.signOut().then(() => {
             this.router.navigate(['/worktime-sign-in'], {clearHistory: true});
         });
-    }
-
-
-    onAddWorktime() {
-        this.router.navigate([`worktime-new`]);
     }
 
     onFilter(args) {

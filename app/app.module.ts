@@ -11,7 +11,6 @@ import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 import * as textinputlayout from 'nativescript-textinputlayout/textInputLayout';
 import { WorktimeDetailModule } from './worktime-detail/worktime-detail.module';
-import { WorktimeNewModule } from './worktime-new/worktime-new.module';
 import { WorktimeProfileModule } from "./worktime-profile/worktime-profile.module";
 import { SignUpModule } from "./auth/sign-up/sign-up.module";
 import { SignInEmailModule } from "./auth/sign-in-email/sign-in-email.module";
@@ -58,7 +57,6 @@ Config.isTablet = device.deviceType === DeviceType.Tablet;
         SignInEmailModule,
         SignUpModule,
         WorktimeDetailModule,
-        WorktimeNewModule,
         WorktimeProfileModule,
         WorktimeBudgetEditModule,
         TNSFontIconModule.forRoot({
